@@ -2,6 +2,7 @@
   "extends": ["next/core-web-vitals", "plugin:react/recommended", "prettier"],
   "plugins": ["react"],
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }

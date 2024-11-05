@@ -3,21 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"node server.js\" \"next dev --turbo --port 3000\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/language": "^6.5.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@reduxjs/toolkit": "^2.3.0",
+    "aws-sdk": "^2.1691.0",
+    "axios": "^1.7.7",
+    "bull": "^4.16.4",
+    "express": "^4.21.1",
+    "googleapis": "^144.0.0",
     "next": "15.0.2",
+    "next-pwa": "^5.6.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "pg": "^8.13.1",
-    "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "concurrently": "^9.1.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.0.2",
     "eslint-config-prettier": "^9.1.0",
