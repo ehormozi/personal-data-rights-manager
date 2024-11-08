@@ -17,7 +17,7 @@ app.prepare().then(() => {
   // For all other routes, handle with Next.js
   server.all('*', (req, res) => handle(req, res));
 
-  server.listen(3000, (err) => {
+  server.listen(3001, (err) => {
     if (err) throw err;
     console.log('> Ready on http://localhost:3001');
   });
