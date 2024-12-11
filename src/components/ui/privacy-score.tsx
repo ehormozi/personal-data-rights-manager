@@ -43,11 +43,31 @@ export default async function PrivacyScore() {
       100,
   );
 
-  const tips = [
-    'Revoke unnecessary permissions.',
-    'Review permissions for apps you no longer use.',
-    'Use two-factor authentication for extra security.',
-  ];
+  const getProgressColor = (score: number): string => {
+    if (score >= 80) return '#16a34a'; // Green for high scores
+    if (score >= 50) return '#f59e0b'; // Yellow for medium scores
+    return '#dc2626'; // Red for low scores
+  };
+
+  const progressColor = getProgressColor(privacyScore);
+
+  const tips = [];
+
+  if (permissionsFactor < 0.7) {
+    tips.push('Revoke unnecessary permissions to improve your privacy.');
+  }
+  if (!userMfaEnabled) {
+    tips.push('Enable two-factor authentication for extra security.');
+  }
+  if (recentBreachesCount > 0) {
+    tips.push('Review your account security after recent data breaches.');
+  }
+  if (sensitivityFactor < 0.7) {
+    tips.push('Minimize sharing sensitive data with services.');
+  }
+  if (tips.length === 0) {
+    tips.push('Great job! Keep maintaining your strong privacy practices.');
+  }
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
@@ -74,13 +94,16 @@ export default async function PrivacyScore() {
               cy="18"
               r="15.915"
               fill="none"
-              stroke="#3b82f6" /* Blue color for progress */
               strokeWidth="3"
               strokeDasharray={`${privacyScore}, 100`}
               strokeDashoffset="0"
+              stroke={progressColor} /* Dynamic color based on score */
             />
           </svg>
-          <div className="absolute inset-0 flex items-center justify-center text-2xl font-semibold text-blue-600">
+          <div
+            className={`absolute inset-0 flex items-center justify-center text-2xl font-semibold`}
+            style={{ color: progressColor }}
+          >
             {privacyScore}%
           </div>
         </div>
