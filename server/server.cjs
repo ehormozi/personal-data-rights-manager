@@ -145,6 +145,69 @@ app.prepare().then(() => {
     }
   });
 
+  server.get('/api/count-by-asset-catgory', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT ac.name AS category, COUNT(*) AS count
+        FROM public.authorizations a
+        INNER JOIN public.assets assets
+        ON a.asset = assets.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        INNER JOIN public.asset_categories ac
+        ON assets.category = ac.id
+        WHERE u.username = 'erfan'
+        GROUP BY ac.id;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/permissions-granted-weeks', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT date_part('week', a.time) AS week, COUNT(*) AS count
+        FROM public.actions a
+        INNER JOIN public.action_types at
+        ON a.type = at.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE a.time >= NOW() - INTERVAL '4 weeks'
+        AND at.name = 'grant'
+        AND u.username = 'erfan'
+        GROUP BY week`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/permissions-revoked-weeks', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT date_part('week', a.time) AS week, COUNT(*) AS count
+        FROM public.actions a
+        INNER JOIN public.action_types at
+        ON a.type = at.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE a.time >= NOW() - INTERVAL '4 weeks'
+        AND at.name = 'revoke'
+        AND u.username = 'erfan'
+        GROUP BY week`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
   server.all('*', (req, res) => handle(req, res));
 
   server.listen(3001, (err) => {

@@ -2,6 +2,8 @@ import PrivacyScore from '@/components/ui/privacy-score';
 import PermissionsSummary from '../components/ui/permissions-summary';
 import QuickActions from '../components/ui/quick-actions';
 import RecentActivity from '../components/ui/recent-activity';
+import YourDataAtAGlanceServer from '@/components/ui/your-data-at-a-glance-server';
+import PermissionTrendsServer from '@/components/ui/permission-trends-server';
 
 export default function Home() {
   return (
@@ -19,16 +21,8 @@ export default function Home() {
           Data Summary & Analytics
         </h3>
         <PrivacyScore />
-        <div className="border">
-          <h4 className="text-xl font-semibold leading-none tracking-tight">
-            Your Data at a Glance
-          </h4>
-        </div>
-        <div className="border">
-          <h4 className="text-xl font-semibold leading-none tracking-tight">
-            Important Alerts
-          </h4>
-        </div>
+        <YourDataAtAGlanceServer />
+        <PermissionTrendsServer />
       </div>
     </div>
   );
