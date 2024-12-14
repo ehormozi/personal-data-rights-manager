@@ -1,4 +1,5 @@
-import ComponentHeading from '../material/component-heading';
+import WhiteBox from '../material/white-box';
+import Widget from '../material/widget';
 
 export default async function PrivacyScore() {
   const responseACS = await fetch('http://localhost:3001/api/assets-count-sum');
@@ -72,8 +73,7 @@ export default async function PrivacyScore() {
   }
 
   return (
-    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
-      <ComponentHeading text="Privacy Score" />
+    <Widget title="Privacy Score">
       <div className="flex flex-col md:flex-row items-start gap-6">
         {/* Circular Progress Bar */}
         <div className="relative w-1/3 max-w-xs">
@@ -121,16 +121,16 @@ export default async function PrivacyScore() {
               : 'Review permissions to improve your privacy.'}
           </p>
           {/* Privacy Tips */}
-          <div className="bg-white p-4 rounded-lg shadow-md space-y-2">
+          <WhiteBox className="p-4 space-y-2">
             <p className="text-gray-700 text-sm font-medium">Privacy Tips:</p>
             <ul className="list-disc list-inside text-gray-500 text-sm">
               {tips.map((tip, index) => (
                 <li key={index}>{tip}</li>
               ))}
             </ul>
-          </div>
+          </WhiteBox>
         </div>
       </div>
-    </div>
+    </Widget>
   );
 }

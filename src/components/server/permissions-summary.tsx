@@ -7,7 +7,9 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import { Key, ReactNode } from 'react';
-import ComponentHeading from '../material/component-heading';
+import Widget from '../material/widget';
+import WhiteBox from '../material/white-box';
+import Button from '../material/button';
 
 const icons: Record<string, ReactNode> = {
   Instagram: <FaInstagram size={16} />,
@@ -23,13 +25,12 @@ export default async function PermissionsSummary() {
   const data = await response.json();
 
   return (
-    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
-      <ComponentHeading text="Permissions Summary" />
+    <Widget title="Permissions Summary">
       <div className="space-y-3 max-h-80 overflow-y-auto">
         {data.map((row: { service: string; assets: number }, index: Key) => (
-          <div
+          <WhiteBox
             key={index}
-            className="flex justify-between items-center p-3 bg-white rounded-lg shadow"
+            className="flex p-3 justify-between items-center"
           >
             <div className="flex items-center space-x-3 flex-1 min-w-0">
               <span className="p-2 bg-blue-100 text-blue-800 rounded-full">
@@ -46,19 +47,26 @@ export default async function PermissionsSummary() {
             </div>
 
             <div className="flex space-x-2">
-              <button className="py-2 px-4 bg-blue-600 text-white rounded-lg text-xs hover:bg-blue-700 whitespace-nowrap">
-                Manage
-              </button>
-              <button className="py-2 px-4 bg-red-600 text-white rounded-lg text-xs hover:bg-red-700 whitespace-nowrap">
-                Revoke All
-              </button>
+              <Button
+                text="Manage"
+                color="bg-blue-600"
+                hover="hover:bg-blue-700"
+              />
+              <Button
+                text="Revoke All"
+                color="bg-red-600"
+                hover="hover:bg-red-700"
+              />
             </div>
-          </div>
+          </WhiteBox>
         ))}
       </div>
-      <button className="w-full py-2 mt-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-        View All Permissions
-      </button>
-    </div>
+      <Button
+        text="View All Permissions"
+        color="bg-blue-600"
+        hover="hover:bg-blue-700"
+        className="w-full mt-4"
+      />
+    </Widget>
   );
 }

@@ -10,7 +10,8 @@ import {
   LinearScale,
   Legend,
 } from 'chart.js';
-import ComponentHeading from '../material/component-heading';
+import Widget from '../material/widget';
+import WhiteBox from '../material/white-box';
 
 Chart.register(LineElement, PointElement, CategoryScale, LinearScale, Legend);
 
@@ -82,17 +83,16 @@ export default function PermissionTrendsClient(props: {
   };
 
   return (
-    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
-      <ComponentHeading text="Permission Trends" />
+    <Widget title="Permission Trends">
       <div className="h-64">
         <Line ref={chartRef} data={data} options={options} />
       </div>
-      <div className="bg-white p-4 rounded-lg shadow-md space-y-2">
+      <WhiteBox className="p-4 space-y-2">
         <p className="text-gray-600 text-sm">
           Analyze how your permissions have changed over the past weeks. Keeping
           track of these trends helps you stay in control of your data.
         </p>
-      </div>
-    </div>
+      </WhiteBox>
+    </Widget>
   );
 }

@@ -15,8 +15,10 @@ import {
   InboxIcon,
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
-import { ReactNode } from 'react';
-import ComponentHeading from '../material/component-heading';
+import { Key, ReactNode } from 'react';
+import Widget from '../material/widget';
+import WhiteBox from '../material/white-box';
+import Button from '../material/button';
 
 const iconByType: Record<string, ReactNode> = {
   data_breach: <ExclamationTriangleIcon className="h-6 w-6" />,
@@ -73,24 +75,23 @@ function formattedDifference(time: string) {
 export default async function RecentActivity() {
   const response = await fetch('http://localhost:3001/api/recent-activity');
   const data = await response.json();
-
-  var counter = 1;
-
   return (
-    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
-      <ComponentHeading text="Recent Activity" />
+    <Widget title="Recent Activity">
       <div className="space-y-3 max-h-80 overflow-y-auto">
         {data.map(
-          (element: {
-            group: string;
-            type: string;
-            description: string;
-            time: string;
-            service: string | null;
-          }) => (
-            <div
-              key={counter++}
-              className="flex items-center justify-between p-2 bg-white rounded-lg shadow"
+          (
+            element: {
+              group: string;
+              type: string;
+              description: string;
+              time: string;
+              service: string | null;
+            },
+            index: Key,
+          ) => (
+            <WhiteBox
+              key={index}
+              className="flex p-2 justify-between items-center"
             >
               <div className="flex items-center space-x-3">
                 <span
@@ -113,13 +114,16 @@ export default async function RecentActivity() {
               <div className="ml-2 text-right text-xs text-gray-500 whitespace-nowrap">
                 {formattedDifference(element.time)}{' '}
               </div>
-            </div>
+            </WhiteBox>
           ),
         )}
       </div>
-      <button className="w-full py-2 mt-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-        View Full Activity Log
-      </button>
-    </div>
+      <Button
+        text="View Full Activity Log"
+        color="bg-blue-600"
+        hover="hover:bg-blue-700"
+        className="w-full mt-4"
+      />
+    </Widget>
   );
 }
