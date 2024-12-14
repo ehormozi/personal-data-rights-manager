@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart,
@@ -10,6 +10,7 @@ import {
   LinearScale,
   Legend,
 } from 'chart.js';
+import ComponentHeading from '../material/component-heading';
 
 Chart.register(LineElement, PointElement, CategoryScale, LinearScale, Legend);
 
@@ -17,7 +18,22 @@ export default function PermissionTrendsClient(props: {
   granted: number[];
   revoked: number[];
 }) {
-  // Mock data for permission trends
+  const chartRef = useRef<any>(null); // Adjusted type to 'any'
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (chartRef.current && chartRef.current.chartInstance) {
+        chartRef.current.chartInstance.resize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const data = {
     labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Time intervals
     datasets: [
@@ -42,6 +58,7 @@ export default function PermissionTrendsClient(props: {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -65,15 +82,17 @@ export default function PermissionTrendsClient(props: {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">Permission Trends</h2>
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Permission Trends" />
       <div className="h-64">
-        <Line data={data} options={options} />
+        <Line ref={chartRef} data={data} options={options} />
       </div>
-      <p className="text-gray-600 text-sm">
-        Analyze how your permissions have changed over the past weeks. Keeping
-        track of these trends helps you stay in control of your data.
-      </p>
+      <div className="bg-white p-4 rounded-lg shadow-md space-y-2">
+        <p className="text-gray-600 text-sm">
+          Analyze how your permissions have changed over the past weeks. Keeping
+          track of these trends helps you stay in control of your data.
+        </p>
+      </div>
     </div>
   );
 }

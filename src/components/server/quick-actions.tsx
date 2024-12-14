@@ -1,3 +1,5 @@
+import ComponentHeading from '../material/component-heading';
+
 export default function QuickActions() {
   const actions = [
     {
@@ -18,8 +20,8 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Quick Actions" />
       <div className="flex flex-wrap gap-4">
         {actions.map((action, index) => (
           <button

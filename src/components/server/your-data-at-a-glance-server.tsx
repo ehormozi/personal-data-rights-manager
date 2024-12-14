@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chart, ArcElement } from 'chart.js';
-import YourDataAtAGlanceClient from './your-data-at-a-glance-client';
+import YourDataAtAGlanceClient from '../client/your-data-at-a-glance-client';
 
 Chart.register(ArcElement);
 

@@ -7,6 +7,7 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import { Key, ReactNode } from 'react';
+import ComponentHeading from '../material/component-heading';
 
 const icons: Record<string, ReactNode> = {
   Instagram: <FaInstagram size={16} />,
@@ -22,11 +23,9 @@ export default async function PermissionsSummary() {
   const data = await response.json();
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">
-        Permissions Summary
-      </h2>
-      <div className="space-y-3 max-h-64 overflow-y-auto">
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Permissions Summary" />
+      <div className="space-y-3 max-h-80 overflow-y-auto">
         {data.map((row: { service: string; assets: number }, index: Key) => (
           <div
             key={index}

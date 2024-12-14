@@ -1,4 +1,4 @@
-import PermissionTrendsClient from './permission-trends-client';
+import PermissionTrendsClient from '../client/permission-trends-client';
 
 export default async function PermissionTrendsServer() {
   const date = new Date();

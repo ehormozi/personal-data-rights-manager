@@ -16,6 +16,7 @@ import {
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { ReactNode } from 'react';
+import ComponentHeading from '../material/component-heading';
 
 const iconByType: Record<string, ReactNode> = {
   data_breach: <ExclamationTriangleIcon className="h-6 w-6" />,
@@ -76,9 +77,9 @@ export default async function RecentActivity() {
   var counter = 1;
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">Recent Activity</h2>
-      <div className="space-y-3 max-h-64 overflow-y-auto">
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Recent Activity" />
+      <div className="space-y-3 max-h-80 overflow-y-auto">
         {data.map(
           (element: {
             group: string;

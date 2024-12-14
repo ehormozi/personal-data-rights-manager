@@ -3,6 +3,7 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip } from 'chart.js';
+import ComponentHeading from '../material/component-heading';
 
 Chart.register(ArcElement, Tooltip);
 
@@ -62,10 +63,8 @@ export default function YourDataAtAGlanceClient(props: {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">
-        Your Data at a Glance
-      </h2>
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Your Data at a Glance" />
 
       <div className="flex flex-col md:flex-row items-center gap-6">
         {/* Pie Chart */}
@@ -74,7 +73,7 @@ export default function YourDataAtAGlanceClient(props: {
         </div>
 
         {/* Data Summary */}
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 bg-white p-4 rounded-lg shadow-md space-y-2">
           <p className="text-gray-700 text-sm font-medium">
             Here&apos;s a breakdown of your shared data:
           </p>

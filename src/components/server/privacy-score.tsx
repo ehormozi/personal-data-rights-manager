@@ -1,3 +1,5 @@
+import ComponentHeading from '../material/component-heading';
+
 export default async function PrivacyScore() {
   const responseACS = await fetch('http://localhost:3001/api/assets-count-sum');
   const dataASC = await responseACS.json();
@@ -70,8 +72,8 @@ export default async function PrivacyScore() {
   }
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md space-y-4">
-      <h2 className="text-lg font-semibold text-gray-800">Privacy Score</h2>
+    <div className="p-4 bg-gray-200 rounded-lg shadow-md space-y-4">
+      <ComponentHeading text="Privacy Score" />
       <div className="flex flex-col md:flex-row items-start gap-6">
         {/* Circular Progress Bar */}
         <div className="relative w-1/3 max-w-xs">
@@ -110,10 +112,10 @@ export default async function PrivacyScore() {
 
         {/* Description Section */}
         <div className="flex-1">
-          <p className="text-gray-700 text-lg font-medium">
+          <p className="text-gray-800 text-lg font-medium">
             Your Privacy Score
           </p>
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-gray-600 text-sm mb-4">
             {privacyScore > 80
               ? "You're doing great! Keep it up."
               : 'Review permissions to improve your privacy.'}
