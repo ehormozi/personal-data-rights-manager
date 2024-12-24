@@ -66,6 +66,7 @@ export default function PermissionsTableClient(props: {
     options: Array<String>,
     onSelect: (selectedList: any, selectedItem: any) => void,
     onRemove: (selectedList: any, selectedItem: any) => void,
+    placeholder: string,
   ) => {
     return (
       <Multiselect
@@ -73,6 +74,7 @@ export default function PermissionsTableClient(props: {
         options={options}
         onSelect={onSelect}
         onRemove={onRemove}
+        placeholder={placeholder}
         style={{
           multiselectContainer: {
             marginTop: '8px',
@@ -81,7 +83,7 @@ export default function PermissionsTableClient(props: {
             backgroundColor: 'rgb(255,255,255)',
           },
           inputField: {
-            width: '96px',
+            width: '192px',
           },
           option: {
             padding: '6px',
@@ -243,12 +245,12 @@ export default function PermissionsTableClient(props: {
   return (
     <Widget title="Permissions Table">
       <section className="flex flex-col bg-white p-4 rounded-lg shadow-md">
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-200">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border border-gray-300 p-2 text-left text-gray-800">
+              <th className="border border-gray-200 p-2 text-left text-gray-800 hover:bg-gray-200 cursor-pointer">
                 <div
-                  className="flex items-center justify-between cursor-pointer"
+                  className="flex items-center justify-between"
                   onClick={() => sortData('service')}
                 >
                   <span>Service</span>
@@ -266,11 +268,12 @@ export default function PermissionsTableClient(props: {
                   }),
                   onSelectService,
                   onRemoveService,
+                  'Select Service',
                 )}
               </th>
-              <th className="border border-gray-300 p-2 text-left text-gray-800 w-1/2">
+              <th className="border border-gray-200 p-2 text-left text-gray-800 hover:bg-gray-200 cursor-pointer w-1/2">
                 <div
-                  className="flex items-center justify-between cursor-pointer"
+                  className="flex items-center justify-between"
                   onClick={() => sortData('permissions')}
                 >
                   <span>Permissions</span>
@@ -288,11 +291,12 @@ export default function PermissionsTableClient(props: {
                   }),
                   onSelectPermission,
                   onRemovePermission,
+                  'Filter by Permissions',
                 )}
               </th>
-              <th className="border border-gray-300 p-2 text-left text-gray-800">
+              <th className="border border-gray-200 p-2 text-left text-gray-800 hover:bg-gray-200 cursor-pointer">
                 <div
-                  className="flex items-center justify-between cursor-pointer"
+                  className="flex items-center justify-between"
                   onClick={() => sortData('sensitivityID')}
                 >
                   <span>Sensitivity</span>
@@ -302,21 +306,25 @@ export default function PermissionsTableClient(props: {
                   ['Low', 'Medium', 'High'],
                   onSelectSensitivity,
                   onRemoveSensitivity,
+                  'Select Sensitivity',
                 )}
               </th>
             </tr>
           </thead>
           <tbody>
             {data.map((row, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="border border-gray-300 p-2 text-gray-600">
+              <tr
+                key={index}
+                className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
+              >
+                <td className="border border-gray-200 p-2 text-gray-600">
                   {row.service}
                 </td>
-                <td className="border border-gray-300 p-2 text-gray-600">
+                <td className="border border-gray-200 p-2 text-gray-600">
                   {row.permissions}
                 </td>
                 <td
-                  className={`border border-gray-300 p-2 ${sensitivityColors[row.sensitivity]}`}
+                  className={`border border-gray-200 p-2 ${sensitivityColors[row.sensitivity]}`}
                 >
                   {row.sensitivity}
                 </td>
