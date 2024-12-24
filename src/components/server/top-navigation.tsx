@@ -3,7 +3,7 @@ export default function TopNavigation(props: {
   classNames: (arg0: string, arg1: string) => string | undefined;
 }) {
   return (
-    <div className="hidden sm:ml-6 sm:block">
+    <div className="hidden sm:ml-6 sm:block py-1">
       <div className="flex space-x-4">
         {props.navigation.map((item) => (
           <a

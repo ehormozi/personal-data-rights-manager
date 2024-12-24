@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Disclosure,
   DisclosureButton,
@@ -10,18 +12,26 @@ import {
 import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
 import TopNavigation from '../components/server/top-navigation';
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Header() {
+export default function Header(props: { currentPage: string }) {
+  const navigation = [
+    {
+      name: 'Dashboard',
+      href: '/',
+      current: props.currentPage === 'dashboard',
+    },
+    {
+      name: 'Permissions Overview',
+      href: '/permissions-overview',
+      current: props.currentPage === 'permissions-overview',
+    },
+    { name: 'Projects', href: '#', current: props.currentPage === 'Projects' },
+    { name: 'Calendar', href: '#', current: props.currentPage === 'Calendar' },
+  ];
+
   return (
     <Disclosure as="nav" className="bg-gray-950">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

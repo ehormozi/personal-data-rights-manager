@@ -21,7 +21,9 @@ const icons: Record<string, ReactNode> = {
 };
 
 export default async function PermissionsSummary() {
-  const response = await fetch('http://localhost:3001/api/authorizations');
+  const response = await fetch(
+    'http://localhost:3001/api/count-authorizations-by-service',
+  );
   const data = await response.json();
 
   return (

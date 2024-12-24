@@ -1,3 +1,5 @@
+@import 'primereact/resources/themes/lara-light-blue/theme.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,4 +20,15 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
 }

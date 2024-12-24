@@ -52,7 +52,14 @@ export default async function PrivacyScore() {
     return '#dc2626'; // Red for low scores
   };
 
+  const getCircleColor = (score: number): string => {
+    if (score >= 80) return '#bbf7d0'; // Green for high scores
+    if (score >= 50) return '#fde68a'; // Yellow for medium scores
+    return '#fecaca'; // Red for low scores
+  };
+
   const progressColor = getProgressColor(privacyScore);
+  const CircleColor = getCircleColor(privacyScore);
 
   const tips = [];
 
@@ -87,7 +94,7 @@ export default async function PrivacyScore() {
               cy="18"
               r="15.915"
               fill="none"
-              stroke="#e5e7eb" /* Gray color for the background */
+              stroke={CircleColor}
               strokeWidth="3"
             />
             {/* Progress Circle */}

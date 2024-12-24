@@ -15,7 +15,7 @@ app.prepare().then(() => {
 
   const server = express();
 
-  server.get('/api/authorizations', async (_req, res) => {
+  server.get('/api/count-authorizations-by-service', async (_req, res) => {
     const client = await pool.connect();
     try {
       const result = await client.query(
@@ -49,7 +49,8 @@ app.prepare().then(() => {
         INNER JOIN public.users u
         ON a.user = u.id
         WHERE u.username = 'erfan'
-        AND a.time >= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - INTERVAL '14 days';`,
+        AND a.time >= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - INTERVAL '140 days'
+        ORDER BY a.time DESC;`,
       );
       res.status(200).json(result.rows);
     } finally {
@@ -201,6 +202,27 @@ app.prepare().then(() => {
         AND at.name = 'revoke'
         AND u.username = 'erfan'
         GROUP BY week`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/all-user-authorizations', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT s.name AS service, assets.name AS asset, assets.sensitivity AS sensitivity
+        FROM public.authorizations a
+        INNER JOIN public.services s
+        ON a.service = s.id
+        INNER JOIN public.assets assets
+        ON a.asset = assets.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE u.username = 'erfan'
+        ORDER BY service ASC, asset ASC;`,
       );
       res.status(200).json(result.rows);
     } finally {
