@@ -7,12 +7,15 @@ import {
   ArrowLongDownIcon,
 } from '@heroicons/react/24/outline';
 import Multiselect from 'multiselect-react-dropdown';
+
 import Widget from '@/components/material/widget';
+import ConfirmationDialog from '@/components/material/confirmation-dialog';
 
 export default function PermissionsTableClient(props: {
   services: string[];
   assets: string[];
   data: { service: string; asset: string; sensitivity: number }[];
+  prefilter?: string;
 }) {
   const sensitivityLabels: Record<number, string> = {
     1: 'Low',
@@ -54,7 +57,11 @@ export default function PermissionsTableClient(props: {
       sensitivityID: number;
       sensitivity: string;
     }[]
-  >(allData);
+  >(
+    typeof props.prefilter === 'string'
+      ? allData.filter((r) => r.service === props.prefilter)
+      : allData,
+  );
 
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -62,7 +69,7 @@ export default function PermissionsTableClient(props: {
   } | null>(null);
 
   const [selectedServices, setSelectedServices] = useState<Set<string>>(
-    new Set(),
+    typeof props.prefilter === 'string' ? new Set(props.prefilter) : new Set(),
   );
 
   const [selectedAssets, setSelectedAssets] = useState<Set<string>>(new Set());
@@ -74,6 +81,8 @@ export default function PermissionsTableClient(props: {
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
 
   const [selectAll, setSelectAll] = useState(false);
+
+  const [showDialog, setShowDialog] = useState(false);
 
   const renderSortIcon = (key: string) => {
     if (sortConfig && sortConfig.key === key) {
@@ -87,6 +96,7 @@ export default function PermissionsTableClient(props: {
   };
 
   const renderMultiSelect = (
+    key: string,
     options: Array<String>,
     onSelect: (selectedList: any, selectedItem: any) => void,
     onRemove: (selectedList: any, selectedItem: any) => void,
@@ -99,6 +109,11 @@ export default function PermissionsTableClient(props: {
         onSelect={onSelect}
         onRemove={onRemove}
         placeholder={placeholder}
+        selectedValues={
+          key === 'service' && typeof props.prefilter === 'string'
+            ? [props.prefilter]
+            : []
+        }
         style={{
           multiselectContainer: {
             marginTop: '8px',
@@ -344,6 +359,21 @@ export default function PermissionsTableClient(props: {
     setSelectedRows(updatedSelection);
   };
 
+  const handleRevokePermissionsClick = (
+    permissions: { service: string; asset: string }[],
+  ) => {
+    setShowDialog(true);
+  };
+
+  const confirmRevokePermissions = () => {
+    // Call API to revoke permissions
+    setShowDialog(false);
+  };
+
+  const cancelRevokePermissions = () => {
+    setShowDialog(false);
+  };
+
   return (
     <Widget title="Permissions Table">
       <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
@@ -355,7 +385,11 @@ export default function PermissionsTableClient(props: {
                 : 'px-4 py-2 bg-red-600 rounded-lg text-sm text-white hover:bg-red-700'
             }
             onClick={() =>
-              console.log('Revoke permissions for:', [...selectedRows])
+              handleRevokePermissionsClick(
+                filteredData
+                  .filter((row) => row.selected === true)
+                  .map((row) => ({ service: row.service, asset: row.asset })),
+              )
             }
             disabled={selectedRows.size === 0}
           >
@@ -406,6 +440,7 @@ export default function PermissionsTableClient(props: {
                   {renderSortIcon('service')}
                 </div>
                 {renderMultiSelect(
+                  'service',
                   props.services.sort((a, b) => {
                     if (a < b) {
                       return -1;
@@ -429,6 +464,7 @@ export default function PermissionsTableClient(props: {
                   {renderSortIcon('asset')}
                 </div>
                 {renderMultiSelect(
+                  'asset',
                   props.assets.sort((a, b) => {
                     if (a < b) {
                       return -1;
@@ -452,6 +488,7 @@ export default function PermissionsTableClient(props: {
                   {renderSortIcon('sensitivityID')}
                 </div>
                 {renderMultiSelect(
+                  'sensitivity',
                   ['Low', 'Medium', 'High'],
                   onSelectSensitivity,
                   onRemoveSensitivity,
@@ -489,6 +526,16 @@ export default function PermissionsTableClient(props: {
             ))}
           </tbody>
         </table>
+        {showDialog && (
+          <ConfirmationDialog
+            title="Revoke Selected Permissions"
+            message="Are you sure you want to revoke the selected permissions ?"
+            confirmLabel="Yes, Revoke"
+            cancelLabel="Cancel"
+            onConfirm={confirmRevokePermissions}
+            onCancel={cancelRevokePermissions}
+          />
+        )}
       </section>
     </Widget>
   );

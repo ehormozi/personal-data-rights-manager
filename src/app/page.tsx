@@ -1,5 +1,5 @@
 import PrivacyScore from '@/components/server/privacy-score';
-import PermissionsSummary from '../components/server/permissions-summary';
+import PermissionsSummaryServer from '../components/server/permissions-summary-server';
 import QuickActions from '../components/server/quick-actions';
 import RecentActivity from '../components/server/recent-activity';
 import YourDataAtAGlanceServer from '@/components/server/your-data-at-a-glance-server';
@@ -12,7 +12,7 @@ export default function Home() {
         <h3 className="text-2xl leading-none tracking-tight text-gray-950">
           Quick Overview
         </h3>
-        <PermissionsSummary />
+        <PermissionsSummaryServer />
         <RecentActivity />
         <QuickActions />
       </div>
