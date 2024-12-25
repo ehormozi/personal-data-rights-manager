@@ -6,15 +6,7 @@ export default function PermissionsOverview() {
       <header className="text-2xl font-semibold text-gray-950 border-b border-gray-300 pb-4">
         Permissions Overview
       </header>
-
       <PermissionsTableServer />
-
-      <section className="flex flex-col bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-medium text-gray-800 mb-4">Bulk Actions</h2>
-        <div className="h-32 flex items-center justify-center text-gray-400">
-          Placeholder for Bulk Actions
-        </div>
-      </section>
     </div>
   );
 }

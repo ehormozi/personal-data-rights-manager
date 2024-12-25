@@ -8,11 +8,6 @@ export default async function PermissionsTableServer() {
 
   let distinctServices: string[] = [];
   let distinctAssets: string[] = [];
-  let dataProcessed: {
-    service: string;
-    permissions: string;
-    sensitivity: number;
-  }[] = [];
 
   data.forEach(function (value: {
     service: string;
@@ -25,32 +20,13 @@ export default async function PermissionsTableServer() {
     if (distinctAssets.includes(value.asset) === false) {
       distinctAssets.push(value.asset);
     }
-    if (
-      dataProcessed.filter((line) => line.service === value.service).length ===
-      0
-    ) {
-      dataProcessed.push({
-        service: value.service,
-        permissions: '',
-        sensitivity: 0,
-      });
-    }
-    let line = dataProcessed.filter(
-      (line) => line.service === value.service,
-    )[0];
-    if (line.permissions.length === 0) {
-      line.permissions += value.asset;
-      line.sensitivity = value.sensitivity;
-    } else {
-      line.permissions += ', ' + value.asset;
-    }
   });
 
   return (
     <PermissionsTableClient
       services={distinctServices}
       assets={distinctAssets}
-      data={dataProcessed}
+      data={data}
     />
   );
 }
