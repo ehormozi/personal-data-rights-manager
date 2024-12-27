@@ -1,8 +1,11 @@
 require('dotenv').config();
 
-const { Pool } = require('pg');
 const express = require('express');
+const { Pool } = require('pg');
 const next = require('next');
+const { Parser } = require('json2csv');
+const ExcelJS = require('exceljs');
+const cors = require('cors');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -14,6 +17,8 @@ app.prepare().then(() => {
   });
 
   const server = express();
+  server.use(express.json());
+  server.use(cors());
 
   server.get('/api/count-authorizations-by-service', async (_req, res) => {
     const client = await pool.connect();
@@ -227,6 +232,53 @@ app.prepare().then(() => {
       res.status(200).json(result.rows);
     } finally {
       client.release();
+    }
+  });
+
+  server.post('/api/export-data', async (req, res) => {
+    const { data, format } = req.body;
+    if (!data || !format) {
+      return res
+        .status(400)
+        .json({ error: 'Invalid request. Data and format are required.' });
+    }
+    try {
+      let fileBuffer;
+      let mimeType;
+      let fileName;
+      if (format === 'CSV') {
+        const json2csvParser = new Parser();
+        const csv = json2csvParser.parse(data);
+        fileBuffer = Buffer.from(csv, 'utf-8');
+        mimeType = 'text/csv';
+        fileName = 'exported_data.csv';
+      } else if (format === 'JSON') {
+        fileBuffer = Buffer.from(JSON.stringify(data, null, 2), 'utf-8');
+        mimeType = 'application/json';
+        fileName = 'exported_data.json';
+      } else if (format === 'XLSX') {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Data');
+        worksheet.addRow(Object.keys(data[0]));
+        data.forEach((row) => {
+          worksheet.addRow(Object.values(row));
+        });
+        fileBuffer = await workbook.xlsx.writeBuffer();
+        mimeType =
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        fileName = 'exported_data.xlsx';
+      } else {
+        return res.status(400).json({ error: 'Unsupported format.' });
+      }
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${fileName}"`,
+      );
+      res.setHeader('Content-Type', mimeType);
+      res.send(fileBuffer);
+    } catch (error) {
+      console.error('Error generating export file:', error);
+      res.status(500).json({ error: 'Failed to generate export file.' });
     }
   });
 
