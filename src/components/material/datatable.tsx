@@ -13,8 +13,9 @@ export default function Datatable(props: {
     key: string;
     label: string;
     type: string;
-    distinctValues: string[];
-    placeholder: string;
+    filter: boolean;
+    distinctValues?: string[];
+    placeholder?: string;
     sortKey?: string;
     colorMap?: Record<string, string>;
     prefilters?: string[];
@@ -258,18 +259,22 @@ export default function Datatable(props: {
                     : column.key,
                 )}
               </div>
-              {renderMultiSelect(
-                column.distinctValues.map((value) => ({
-                  column: column.key,
-                  value: value,
-                })),
-                onSelectOption,
-                onRemoveOption,
-                column.placeholder,
-                typeof column.prefilters === 'undefined'
-                  ? []
-                  : column.prefilters,
-              )}
+              {column.filter === true &&
+              column.distinctValues &&
+              column.placeholder
+                ? renderMultiSelect(
+                    column.distinctValues.map((value) => ({
+                      column: column.key,
+                      value: value,
+                    })),
+                    onSelectOption,
+                    onRemoveOption,
+                    column.placeholder,
+                    typeof column.prefilters === 'undefined'
+                      ? []
+                      : column.prefilters,
+                  )
+                : null}
             </th>
           ))}
         </tr>
@@ -296,7 +301,7 @@ export default function Datatable(props: {
             {props.columns.map((c, i) => (
               <td
                 key={i}
-                className={`border border-gray-200 p-2 text-gray-600 ${typeof c.colorMap === 'undefined' ? null : c.colorMap[row[c.key].toString()] + ' font-semibold'}`}
+                className={`border border-gray-200 p-2 text-gray-600 ${typeof c.colorMap === 'undefined' ? null : (row[c.key].toString() in c.colorMap ? c.colorMap[row[c.key].toString()] : c.colorMap.default) + ' font-semibold'}`}
               >
                 {row[c.key as keyof typeof row]}
               </td>
