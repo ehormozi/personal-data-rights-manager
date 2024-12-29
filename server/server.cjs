@@ -218,7 +218,7 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT s.name AS service, assets.name AS asset, assets.sensitivity AS sensitivity
+        `SELECT a.id AS id, s.name AS service, assets.name AS asset, assets.sensitivity AS sensitivity
         FROM public.authorizations a
         INNER JOIN public.services s
         ON a.service = s.id
@@ -279,6 +279,66 @@ app.prepare().then(() => {
     } catch (error) {
       console.error('Error generating export file:', error);
       res.status(500).json({ error: 'Failed to generate export file.' });
+    }
+  });
+
+  server.get('/api/count-all-requests', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT COUNT(*) AS count
+        FROM public.data_requests dr
+        INNER JOIN public.users u
+        ON dr.user = u.id
+        WHERE u.username = 'erfan';`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/count-requests-by-status', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT drs.name AS status, COUNT(*) AS count
+        FROM public.data_requests dr
+        INNER JOIN public.data_request_statuses drs
+        ON dr.status = drs.id
+        INNER JOIN public.users u
+        ON dr.user = u.id
+        WHERE u.username = 'erfan'
+        GROUP BY drs.name;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/user-requests', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT drt.name AS type, s.name AS service, a.name AS asset, drs.name AS status, dr.updated_at AS updated_at
+        FROM public.data_requests dr
+        INNER JOIN public.data_request_types drt
+        ON dr.type = drt.id
+        INNER JOIN public.services s
+        ON dr.service = s.id
+        INNER JOIN public.assets a
+        ON dr.asset = a.id
+        INNER JOIN public.data_request_statuses drs
+        ON dr.status = drs.id
+        INNER JOIN public.users u
+        ON dr.user = u.id
+        WHERE u.username = 'erfan'
+        ORDER BY dr.updated_at DESC;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
     }
   });
 

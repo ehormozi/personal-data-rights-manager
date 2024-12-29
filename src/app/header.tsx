@@ -28,7 +28,11 @@ export default function Header(props: { currentPage: string }) {
       href: '/permissions-overview',
       current: props.currentPage === 'permissions-overview',
     },
-    { name: 'Projects', href: '#', current: props.currentPage === 'Projects' },
+    {
+      name: 'Request Management',
+      href: '/request-management',
+      current: props.currentPage === 'request-management',
+    },
     { name: 'Calendar', href: '#', current: props.currentPage === 'Calendar' },
   ];
 

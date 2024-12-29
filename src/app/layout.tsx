@@ -23,7 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname(); // Dynamic route
+  const pathname = usePathname();
   const currentPage = pathname === '/' ? 'dashboard' : pathname.slice(1);
 
   return (
