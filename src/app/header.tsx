@@ -24,14 +24,14 @@ export default function Header(props: { currentPage: string }) {
       current: props.currentPage === 'dashboard',
     },
     {
-      name: 'Permissions Overview',
-      href: '/permissions-overview',
-      current: props.currentPage === 'permissions-overview',
+      name: 'Permissions',
+      href: '/permissions',
+      current: props.currentPage === 'permissions',
     },
     {
-      name: 'Request Management',
-      href: '/request-management',
-      current: props.currentPage === 'request-management',
+      name: 'Requests',
+      href: '/requests',
+      current: props.currentPage === 'requests',
     },
     { name: 'Calendar', href: '#', current: props.currentPage === 'Calendar' },
   ];

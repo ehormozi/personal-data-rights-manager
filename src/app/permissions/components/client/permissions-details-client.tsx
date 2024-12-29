@@ -6,7 +6,7 @@ import ConfirmationDialog from '@/components/material/confirmation-dialog';
 import FileFormatDialog from '@/components/material/file-format-dialog';
 import Datatable from '@/components/material/datatable';
 
-export default function PermissionsTableClient(props: {
+export default function PermissionsDetailsClient(props: {
   services: string[];
   assets: string[];
   data: {
@@ -30,6 +30,7 @@ export default function PermissionsTableClient(props: {
           key: 'service',
           label: 'Service',
           type: 'string',
+          filter: true,
           distinctValues: props.services,
           placeholder: 'Select Service',
         }
@@ -37,6 +38,7 @@ export default function PermissionsTableClient(props: {
           key: 'service',
           label: 'Service',
           type: 'string',
+          filter: true,
           distinctValues: props.services,
           placeholder: 'Select Service',
           prefilters: [props.prefilter],
@@ -45,6 +47,7 @@ export default function PermissionsTableClient(props: {
       key: 'asset',
       label: 'Asset',
       type: 'string',
+      filter: true,
       distinctValues: props.assets,
       placeholder: 'Filter by Permissions',
     },
@@ -52,6 +55,7 @@ export default function PermissionsTableClient(props: {
       key: 'sensitivityLabel',
       label: 'Sensitivity',
       type: 'string',
+      filter: true,
       distinctValues: ['Low', 'Medium', 'High'],
       sortKey: 'sensitivity',
       placeholder: 'Select Sensitivity',
@@ -81,10 +85,12 @@ export default function PermissionsTableClient(props: {
     }[]
   >(
     typeof props.prefilter === 'undefined'
-      ? allData
-      : [...allData].filter((row) => {
-          row.service === props.prefilter;
-        }),
+      ? [...props.data].map((row) => ({ ...row, selected: false }))
+      : [...props.data]
+          .map((row) => ({ ...row, selected: false }))
+          .filter((row) => {
+            row.service === props.prefilter;
+          }),
   );
 
   const [showRevokeDialog, setShowRevokeDialog] = useState(false);
@@ -199,7 +205,7 @@ export default function PermissionsTableClient(props: {
   };
 
   return (
-    <Widget title="Permissions Table">
+    <Widget title="Permissions Details">
       <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
         <div className="flex flex-wrap gap-4 mb-4">
           <button

@@ -184,7 +184,7 @@ export default function Datatable(props: {
     onSelect: (selectedList: any, selectedItem: any) => void,
     onRemove: (selectedList: any, selectedItem: any) => void,
     placeholder: string,
-    selectedValues: string[],
+    selectedValues: { column: string; value: string }[],
   ) => {
     return (
       <Multiselect
@@ -272,7 +272,10 @@ export default function Datatable(props: {
                     column.placeholder,
                     typeof column.prefilters === 'undefined'
                       ? []
-                      : column.prefilters,
+                      : column.prefilters.map((prefilter) => ({
+                          column: column.key,
+                          value: prefilter,
+                        })),
                   )
                 : null}
             </th>

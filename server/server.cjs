@@ -214,6 +214,62 @@ app.prepare().then(() => {
     }
   });
 
+  server.get('/api/count-all-authorizations', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT COUNT(*) AS count
+        FROM public.authorizations a
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE u.username = 'erfan';`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/count-sensitive-authorizations', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT COUNT(*) AS count
+        FROM public.authorizations a
+        INNER JOIN public.assets assets
+        ON a.asset = assets.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE assets.sensitivity = 3
+        AND u.username = 'erfan';`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/top-service', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT s.name AS service, COUNT(*) AS count
+        FROM public.authorizations a
+        INNER JOIN public.services s
+        ON a.service = s.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE u.username = 'erfan'
+        GROUP BY s.name
+        ORDER BY count DESC
+        LIMIT 1;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
   server.get('/api/all-user-authorizations', async (_req, res) => {
     const client = await pool.connect();
     try {

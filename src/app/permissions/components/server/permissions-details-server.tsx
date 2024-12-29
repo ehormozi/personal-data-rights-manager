@@ -1,6 +1,6 @@
-import PermissionsTableClient from '../client/permissions-table-client';
+import PermissionsDetailsClient from '../client/permissions-details-client';
 
-export default async function PermissionsTableServer(props: {
+export default async function PermissionsDetailsServer(props: {
   prefilter?: string;
 }) {
   const response = await fetch(
@@ -52,16 +52,15 @@ export default async function PermissionsTableServer(props: {
     }
     return 0;
   });
-
   return typeof props.prefilter === 'string' ? (
-    <PermissionsTableClient
+    <PermissionsDetailsClient
       services={distinctServices}
       assets={distinctAssets}
       data={data}
       prefilter={props.prefilter}
     />
   ) : (
-    <PermissionsTableClient
+    <PermissionsDetailsClient
       services={distinctServices}
       assets={distinctAssets}
       data={data}

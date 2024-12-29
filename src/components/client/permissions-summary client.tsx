@@ -69,7 +69,7 @@ export default function PermissionsSummaryClient(props: {
 
               <div className="flex space-x-2">
                 <Button
-                  route={`/permissions-overview?service=${row.service}`}
+                  route={`/permissions?service=${row.service}`}
                   text="Manage"
                   color="bg-blue-600"
                   hover="hover:bg-blue-700"
@@ -86,7 +86,7 @@ export default function PermissionsSummaryClient(props: {
         )}
       </div>
       <Button
-        route={`/permissions-overview`}
+        route={`/permissions`}
         text="View All Permissions"
         color="bg-blue-600"
         hover="hover:bg-blue-700"
