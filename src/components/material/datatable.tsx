@@ -97,8 +97,12 @@ export default function Datatable(props: {
     column: string;
     value: string;
   }) => {
-    let nextSelectedOptions = selectedOptions;
-    nextSelectedOptions.delete(removedItem);
+    let nextSelectedOptions = new Set(
+      Array.from(selectedOptions).filter(
+        (e) =>
+          !(e.column === removedItem.column && e.value === removedItem.value),
+      ),
+    );
     setSelectedOptions(nextSelectedOptions);
     const selectedOptionsArr = [...nextSelectedOptions];
     const nextFilteredData = [...props.allData].filter((row) => {

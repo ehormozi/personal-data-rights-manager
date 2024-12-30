@@ -88,9 +88,7 @@ export default function PermissionsDetailsClient(props: {
       ? [...props.data].map((row) => ({ ...row, selected: false }))
       : [...props.data]
           .map((row) => ({ ...row, selected: false }))
-          .filter((row) => {
-            row.service === props.prefilter;
-          }),
+          .filter((row) => row.service === props.prefilter),
   );
 
   const [showRevokeDialog, setShowRevokeDialog] = useState(false);
