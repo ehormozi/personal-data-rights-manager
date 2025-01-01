@@ -330,7 +330,7 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT dr.id AS id, drt.name AS type, s.name AS service, a.name AS asset, drs.name AS status, dr.updated_at AS updated_at
+        `SELECT dr.id AS id, drt.name AS type, s.name AS service, a.name AS asset, drs.name AS status, dr.updated_at AS updated_at, dra.name AS action
         FROM public.data_requests dr
         INNER JOIN public.data_request_types drt
         ON dr.type = drt.id
@@ -340,6 +340,10 @@ app.prepare().then(() => {
         ON dr.asset = a.id
         INNER JOIN public.data_request_statuses drs
         ON dr.status = drs.id
+        LEFT JOIN public.data_request_status_action_map drsam
+        ON dr.status = drsam.status
+        INNER JOIN public.data_request_actions dra
+        ON drsam.action = dra.id
         INNER JOIN public.users u
         ON dr.user = u.id
         WHERE u.username = 'erfan'

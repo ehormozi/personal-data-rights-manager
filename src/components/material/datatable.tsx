@@ -207,7 +207,7 @@ export default function Datatable(props: {
             backgroundColor: 'rgb(255,255,255)',
           },
           inputField: {
-            width: '192px',
+            width: '148px',
           },
           option: {
             padding: '6px',
@@ -249,19 +249,27 @@ export default function Datatable(props: {
               <div
                 className="flex items-center justify-between"
                 onClick={() =>
-                  onSortData(
-                    typeof column.sortKey === 'string'
-                      ? column.sortKey
-                      : column.key,
-                  )
+                  column.type != 'button'
+                    ? onSortData(
+                        typeof column.sortKey === 'string'
+                          ? column.sortKey
+                          : column.key,
+                      )
+                    : {}
                 }
               >
-                <span>{column.label}</span>
-                {renderSortIcon(
-                  typeof column.sortKey === 'string'
-                    ? column.sortKey
-                    : column.key,
-                )}
+                <span
+                  className={`${column.type === 'button' ? 'w-full text-center' : ''}`}
+                >
+                  {column.label}
+                </span>
+                {column.type != 'button'
+                  ? renderSortIcon(
+                      typeof column.sortKey === 'string'
+                        ? column.sortKey
+                        : column.key,
+                    )
+                  : null}
               </div>
               {column.filter === true &&
               column.distinctValues &&
@@ -308,7 +316,14 @@ export default function Datatable(props: {
             {props.columns.map((c, i) => (
               <td
                 key={i}
-                className={`border border-gray-200 p-2 text-gray-600 ${typeof c.colorMap === 'undefined' ? null : (row[c.key].toString() in c.colorMap ? c.colorMap[row[c.key].toString()] : c.colorMap.default) + ' font-semibold'}`}
+                className={`border border-gray-200 p-2 text-gray-600
+                  ${
+                    typeof c.colorMap === 'undefined'
+                      ? ''
+                      : (row[c.key].toString() in c.colorMap
+                          ? c.colorMap[row[c.key].toString()]
+                          : c.colorMap.default) + ' font-semibold'
+                  }`}
               >
                 {row[c.key as keyof typeof row]}
               </td>
