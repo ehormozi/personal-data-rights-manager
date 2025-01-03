@@ -43,19 +43,19 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT atg.name AS group, at.name AS type, at.description, a.time, s.name AS service
-        FROM public.actions a
-        INNER JOIN public.action_types at
-        ON a.type = at.id
-        INNER JOIN public.action_type_groups atg
-        ON at.group = atg.id
+        `SELECT eg.name AS group, et.name AS type, et.description, e.time, s.name AS service
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
+        INNER JOIN public.event_groups eg
+        ON et.group = eg.id
         LEFT JOIN public.services s
-        ON a.service = s.id
+        ON e.service = s.id
         INNER JOIN public.users u
-        ON a.user = u.id
+        ON e.user = u.id
         WHERE u.username = 'erfan'
-        AND a.time >= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - INTERVAL '140 days'
-        ORDER BY a.time DESC;`,
+        AND e.time >= (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - INTERVAL '140 days'
+        ORDER BY e.time DESC;`,
       );
       res.status(200).json(result.rows);
     } finally {
@@ -101,15 +101,15 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT COUNT(a.*) AS revoke_count
-        FROM public.actions a
+        `SELECT COUNT(e.*) AS revoke_count
+        FROM public.events e
         INNER JOIN public.users u
-        ON a.user = u.id
-        INNER JOIN public.action_types at
-        ON a.type = at.id
+        ON e.user = u.id
+        INNER JOIN public.event_types et
+        ON e.type = et.id
         WHERE u.username = 'erfan'
-        AND at.name = 'revoke'
-        AND a.time >= NOW() - INTERVAL '30 days';`,
+        AND et.name = 'revoke'
+        AND e.time >= NOW() - INTERVAL '30 days';`,
       );
       res.status(200).json(result.rows);
     } finally {
@@ -122,14 +122,14 @@ app.prepare().then(() => {
     try {
       const result = await client.query(
         `SELECT COUNT(*) AS breach_count
-        FROM public.actions a
+        FROM public.events e
         INNER JOIN public.users u
-        ON a.user = u.id
-        INNER JOIN public.action_types at
-        ON a.type = at.id
+        ON e.user = u.id
+        INNER JOIN public.event_types et
+        ON e.type = et.id
         WHERE u.username = 'erfan'
-        AND at.name = 'data_breach'
-        AND a.time >= NOW() - INTERVAL '24 months';`,
+        AND et.name = 'data_breach'
+        AND e.time >= NOW() - INTERVAL '24 months';`,
       );
       res.status(200).json(result.rows);
     } finally {
@@ -176,14 +176,14 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT date_part('week', a.time) AS week, COUNT(*) AS count
-        FROM public.actions a
-        INNER JOIN public.action_types at
-        ON a.type = at.id
+        `SELECT date_part('week', e.time) AS week, COUNT(*) AS count
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
         INNER JOIN public.users u
-        ON a.user = u.id
-        WHERE a.time >= NOW() - INTERVAL '4 weeks'
-        AND at.name = 'grant'
+        ON e.user = u.id
+        WHERE e.time >= NOW() - INTERVAL '4 weeks'
+        AND et.name = 'grant'
         AND u.username = 'erfan'
         GROUP BY week`,
       );
@@ -197,14 +197,14 @@ app.prepare().then(() => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT date_part('week', a.time) AS week, COUNT(*) AS count
-        FROM public.actions a
-        INNER JOIN public.action_types at
-        ON a.type = at.id
+        `SELECT date_part('week', e.time) AS week, COUNT(*) AS count
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
         INNER JOIN public.users u
-        ON a.user = u.id
-        WHERE a.time >= NOW() - INTERVAL '4 weeks'
-        AND at.name = 'revoke'
+        ON e.user = u.id
+        WHERE e.time >= NOW() - INTERVAL '4 weeks'
+        AND et.name = 'revoke'
         AND u.username = 'erfan'
         GROUP BY week`,
       );
@@ -348,6 +348,27 @@ app.prepare().then(() => {
         ON dr.user = u.id
         WHERE u.username = 'erfan'
         ORDER BY dr.updated_at DESC;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/activity-summary', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT ec.name AS category, COUNT(*) AS count
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
+        INNER JOIN public.event_categories ec
+        ON et.category = ec.id
+        INNER JOIN public.users u
+        ON e.user = u.id
+        WHERE u.username = 'erfan'
+        GROUP BY ec.name;`,
       );
       res.status(200).json(result.rows);
     } finally {

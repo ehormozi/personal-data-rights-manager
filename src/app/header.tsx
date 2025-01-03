@@ -33,7 +33,11 @@ export default function Header(props: { currentPage: string }) {
       href: '/requests',
       current: props.currentPage === 'requests',
     },
-    { name: 'Calendar', href: '#', current: props.currentPage === 'Calendar' },
+    {
+      name: 'Activity Log',
+      href: '/activity-log',
+      current: props.currentPage === 'activity-log',
+    },
   ];
 
   return (
