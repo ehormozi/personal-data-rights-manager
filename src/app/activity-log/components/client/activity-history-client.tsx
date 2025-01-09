@@ -6,71 +6,44 @@ import ConfirmationDialog from '@/components/material/confirmation-dialog';
 import FileFormatDialog from '@/components/material/file-format-dialog';
 import Datatable from '@/components/material/datatable';
 
-export default function RequestHistoryClient(props: {
-  types: string[];
-  services: string[];
-  assets: string[];
-  statuses: string[];
+export default function ActivityHistoryClient(props: {
+  categories: string[];
+  events: string[];
   data: {
     id: number;
-    type: string;
-    service: string;
-    asset: string;
-    status: string;
-    updated_at: string;
+    time: string;
+    category: string;
+    event: string;
+    details: string;
     action: string;
   }[];
 }) {
-  const statusColors: Record<string, string> = {
-    Pending: 'text-yellow-600',
-    'In Progress': 'text-yellow-600',
-    Completed: 'text-green-600',
-    Failed: 'text-red-600',
-    Cancelled: 'text-red-600',
-    'Awaiting User Action': 'text-yellow-600',
-    Rejected: 'text-red-600',
-    Delayed: 'text-yellow-600',
-    Scheduled: 'text-yellow-600',
-    Expired: 'text-yellow-600',
-  };
-
   const columns = [
     {
-      key: 'type',
-      label: 'Type',
+      key: 'time',
+      label: 'Time',
       type: 'string',
-      filter: true,
-      distinctValues: props.types,
-      placeholder: 'Select Type',
+      filter: false,
     },
     {
-      key: 'service',
-      label: 'Service',
+      key: 'category',
+      label: 'Category',
       type: 'string',
       filter: true,
-      distinctValues: props.services,
-      placeholder: 'Select Service',
+      distinctValues: props.categories,
+      placeholder: 'Select Category',
     },
     {
-      key: 'asset',
-      label: 'Asset',
+      key: 'event',
+      label: 'Event',
       type: 'string',
       filter: true,
-      distinctValues: props.assets,
-      placeholder: 'Select Asset',
+      distinctValues: props.events,
+      placeholder: 'Select Event',
     },
     {
-      key: 'status',
-      label: 'Status',
-      type: 'string',
-      filter: true,
-      distinctValues: props.statuses,
-      placeholder: 'Select Status',
-      colorMap: statusColors,
-    },
-    {
-      key: 'updated_at',
-      label: 'Last Update',
+      key: 'details',
+      label: 'Details',
       type: 'string',
       filter: false,
     },
@@ -82,77 +55,78 @@ export default function RequestHistoryClient(props: {
     },
   ];
 
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showUndoDialog, setShowUndoDialog] = useState(false);
 
-  const [showResendDialog, setShowResendDialog] = useState(false);
+  const [showCancelRequestDialog, setShowCancelRequestDialog] = useState(false);
 
-  const [showCancelScheduleDialog, setShowCancelScheduleDialog] =
-    useState(false);
+  const [showResendRequestDialog, setShowResendRequestDialog] = useState(false);
 
-  const [showResubmitDialog, setShowResubmitDialog] = useState(false);
-
-  const handleCancelRequest = (id: number) => {
-    console.log(`Cancel request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleResend = (id: number) => {
-    console.log(`Resend request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleDownloadData = (id: number) => {
-    console.log(`DownloadData request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleEdit = (id: number) => {
-    console.log(`Edit request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleProvideDetails = (id: number) => {
-    console.log(`ProvideDetails request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleContactSupport = (id: number) => {
-    console.log(`ContactSupport request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleSetNotification = (id: number) => {
-    console.log(`NotifyMe request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleCancelSchedule = (id: number) => {
-    console.log(`CancelSchedule request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleResubmit = (id: number) => {
-    console.log(`Resubmit request with ID: ${id}`);
-    // Add API call to cancel the request
-  };
-
-  const handleViewErrorDetails = (id: number) => {
-    console.log(`ViewErrorDetails request with ID: ${id}`);
-    // Add API call to cancel the request
+  const handleViewSession = (id: number) => {
+    console.log(`ViewSession with ID: ${id}`);
+    // Add API call
   };
 
   const handleViewDetails = (id: number) => {
-    console.log(`ViewDetails request with ID: ${id}`);
-    // Add API call to cancel the request
+    console.log(`ViewDetails with ID: ${id}`);
+    // Add API call
+  };
+
+  const handleUndo = (id: number) => {
+    console.log(`Undo with ID: ${id}`);
+    // Add API call
+  };
+
+  const handleCancelRequest = (id: number) => {
+    console.log(`CancelRequest with ID: ${id}`);
+    // Add API call
+  };
+
+  const handleResendRequest = (id: number) => {
+    console.log(`ResendRequest with ID: ${id}`);
+    // Add API call
+  };
+
+  const handleReportIssue = (id: number) => {
+    console.log(`ReportIssue with ID: ${id}`);
+    // Add API call
+  };
+
+  const handleAcknowledge = (id: number) => {
+    console.log(`Acknowledge with ID: ${id}`);
+    // Add API call
   };
 
   const actions = [
     {
-      key: 'Cancel',
+      key: 'View Session',
+      bgColor: 'bg-blue-500',
+      hoverColor: 'hover:bg-blue-600',
+      handleConfirm: handleViewSession,
+    },
+    {
+      key: 'View Details',
+      bgColor: 'bg-blue-500',
+      hoverColor: 'hover:bg-blue-600',
+      handleConfirm: handleViewDetails,
+    },
+    {
+      key: 'Undo',
+      bgColor: 'bg-blue-500',
+      hoverColor: 'hover:bg-blue-600',
+      showDialog: showUndoDialog,
+      setShowDialog: setShowUndoDialog,
+      handleConfirm: handleUndo,
+      title: 'Undo',
+      message: 'Are you sure you want to undo this action?',
+      confirmLabel: 'Yes, Undo',
+      cancelLabel: 'Cancel',
+    },
+    {
+      key: 'Cancel Request',
       bgColor: 'bg-red-500',
       hoverColor: 'hover:bg-red-600',
-      showDialog: showCancelDialog,
-      setShowDialog: setShowCancelDialog,
+      showDialog: showCancelRequestDialog,
+      setShowDialog: setShowCancelRequestDialog,
       handleConfirm: handleCancelRequest,
       title: 'Cancel Request',
       message:
@@ -161,12 +135,12 @@ export default function RequestHistoryClient(props: {
       cancelLabel: 'No, Keep It',
     },
     {
-      key: 'Resend',
+      key: 'Resend Request',
       bgColor: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      showDialog: showResendDialog,
-      setShowDialog: setShowResendDialog,
-      handleConfirm: handleResend,
+      showDialog: showResendRequestDialog,
+      setShowDialog: setShowResendRequestDialog,
+      handleConfirm: handleResendRequest,
       title: 'Resend Request',
       message:
         'Are you sure you want to resend this request? This will retry the request with the same details.',
@@ -174,83 +148,26 @@ export default function RequestHistoryClient(props: {
       cancelLabel: 'Cancel',
     },
     {
-      key: 'Download Results',
-      bgColor: 'bg-green-500',
-      hoverColor: 'hover:bg-green-600',
-      handleConfirm: handleDownloadData,
-    },
-    {
-      key: 'Edit',
-      bgColor: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      handleConfirm: handleEdit,
-    },
-    {
-      key: 'Provide Details',
-      bgColor: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      handleConfirm: handleProvideDetails,
-    },
-    {
-      key: 'Contact Support',
-      bgColor: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      handleConfirm: handleContactSupport,
-    },
-    {
-      key: 'Notify Me',
-      bgColor: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      handleConfirm: handleSetNotification,
-    },
-    {
-      key: 'Cancel Schedule',
+      key: 'Report Issue',
       bgColor: 'bg-red-500',
       hoverColor: 'hover:bg-red-600',
-      showDialog: showCancelScheduleDialog,
-      setShowDialog: setShowCancelScheduleDialog,
-      handleConfirm: handleCancelSchedule,
-      title: 'Cancel Scheduled Request',
-      message:
-        'Are you sure you want to cancel this scheduled request? This action cannot be undone.',
-      confirmLabel: 'Yes, Cancel Schedule',
-      cancelLabel: 'Keep Schedule',
+      handleConfirm: handleReportIssue,
     },
     {
-      key: 'Resubmit',
+      key: 'Acknowledge',
       bgColor: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      showDialog: showResubmitDialog,
-      setShowDialog: setShowResubmitDialog,
-      handleConfirm: handleResubmit,
-      title: 'Resubmit Request',
-      message:
-        'Are you sure you want to resubmit this request? This will restart the process.',
-      confirmLabel: 'Yes, Resubmit',
-      cancelLabel: 'Cancel',
-    },
-    {
-      key: 'View Error Details',
-      bgColor: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      handleConfirm: handleViewErrorDetails,
-    },
-    {
-      key: 'View Details',
-      bgColor: 'bg-green-500',
-      hoverColor: 'hover:bg-green-600',
-      handleConfirm: handleViewDetails,
+      handleConfirm: handleAcknowledge,
     },
   ];
 
   const [allData, setAllData] = useState<
     {
       id: number;
-      type: string;
-      service: string;
-      asset: string;
-      status: string;
-      updated_at: string;
+      time: string;
+      category: string;
+      event: string;
+      details: string;
       selected: boolean;
       actions: any;
     }[]
@@ -282,18 +199,7 @@ export default function RequestHistoryClient(props: {
     })),
   );
 
-  const [filteredData, setFilteredData] = useState<
-    {
-      id: number;
-      type: string;
-      service: string;
-      asset: string;
-      status: string;
-      updated_at: string;
-      selected: boolean;
-      actions: any;
-    }[]
-  >(allData);
+  const [filteredData, setFilteredData] = useState<typeof allData>(allData);
 
   const [selectedRow, setSelectedRow] = useState<number>();
 
@@ -328,11 +234,10 @@ export default function RequestHistoryClient(props: {
       filteredData
         .filter((row) => row.selected === true)
         .map((row) => ({
-          type: row.type,
-          service: row.service,
-          asset: row.asset,
-          status: row.status,
-          updated_at: row.updated_at,
+          time: row.time,
+          category: row.category,
+          event: row.event,
+          details: row.details,
         })),
       selectedExportFormat,
     );
@@ -346,11 +251,10 @@ export default function RequestHistoryClient(props: {
 
   const handleExport = async (
     selectedRows: {
-      type: string;
-      service: string;
-      asset: string;
-      status: string;
-      updated_at: string;
+      time: string;
+      category: string;
+      event: string;
+      details: string;
     }[],
     format: string,
   ) => {
@@ -375,7 +279,6 @@ export default function RequestHistoryClient(props: {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log('Export successful');
       } else {
         console.log(response);
         console.error('Export failed');
@@ -386,7 +289,7 @@ export default function RequestHistoryClient(props: {
   };
 
   return (
-    <Widget title="Request History">
+    <Widget title="Activity History">
       <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
         <div className="flex flex-wrap gap-4 mb-4">
           <button

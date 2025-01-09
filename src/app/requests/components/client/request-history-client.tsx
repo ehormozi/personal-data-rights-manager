@@ -375,7 +375,6 @@ export default function RequestHistoryClient(props: {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log('Export successful');
       } else {
         console.log(response);
         console.error('Export failed');

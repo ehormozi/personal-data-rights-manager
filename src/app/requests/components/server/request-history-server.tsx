@@ -27,8 +27,10 @@ export default async function RequestHistoryServer() {
       if (newData.filter((r) => r.id === row.id).length === 0) {
         newData.push(row);
       } else {
-        let newRow = newData.filter((r) => r.id === row.id)[0];
-        newRow.action = newRow.action + ', ' + row.action;
+        let newRow = newData.find((r) => r.id === row.id);
+        if (newRow) {
+          newRow.action = newRow.action + ', ' + row.action;
+        }
       }
     },
   );
@@ -66,11 +68,11 @@ export default async function RequestHistoryServer() {
     const hours = date.getHours();
     const seconds = date.getSeconds();
     value.updated_at =
-      day +
-      '/' +
-      (monthIndex + 1) +
-      '/' +
       year +
+      '-' +
+      (monthIndex + 1 < 10 ? '0' + (monthIndex + 1) : monthIndex + 1) +
+      '-' +
+      (day < 10 ? '0' + day : day) +
       ' ' +
       (hours < 10 ? '0' + hours : hours) +
       ':' +

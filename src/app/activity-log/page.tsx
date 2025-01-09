@@ -1,5 +1,5 @@
-import RequestSummary from './components/server/activity-summary';
-import RequestHistoryServer from './components/server/request-history-server';
+import ActivitySummary from './components/server/activity-summary';
+import ActivityHistoryServer from './components/server/activity-history-server';
 
 export default function ActivityLog() {
   return (
@@ -7,8 +7,8 @@ export default function ActivityLog() {
       <header className="text-2xl font-semibold text-gray-950 border-b border-gray-300 pb-4">
         Activity Log
       </header>
-      <RequestSummary />
-      <RequestHistoryServer />
+      <ActivitySummary />
+      <ActivityHistoryServer />
     </div>
   );
 }

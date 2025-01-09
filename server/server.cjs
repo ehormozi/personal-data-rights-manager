@@ -342,7 +342,7 @@ app.prepare().then(() => {
         ON dr.status = drs.id
         LEFT JOIN public.data_request_status_action_map drsam
         ON dr.status = drsam.status
-        INNER JOIN public.data_request_actions dra
+        LEFT JOIN public.data_request_actions dra
         ON drsam.action = dra.id
         INNER JOIN public.users u
         ON dr.user = u.id
@@ -369,6 +369,45 @@ app.prepare().then(() => {
         ON e.user = u.id
         WHERE u.username = 'erfan'
         GROUP BY ec.name;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/activity-history', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT
+          e.id AS id,
+          e.time AS time,
+          ec.name AS category,
+          et.label AS event,
+          et.description AS details,
+          s.name AS service,
+          ea.name AS action
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
+        INNER JOIN public.event_categories ec
+        ON et.category = ec.id
+        LEFT JOIN public.data_requests dr
+        ON e.request = dr.id
+        LEFT JOIN public.services s
+        ON (
+          (e.request IS NOT NULL AND dr.service = s.id)
+          OR (e.request IS NULL AND e.service IS NOT NULL AND e.service = s.id)
+        )
+        LEFT JOIN public.event_type_action_map etam
+        ON et.id = etam.event_type
+        LEFT JOIN public.event_actions ea
+        ON etam.event_action = ea.id
+        INNER JOIN public.users u
+        ON e.user = u.id
+        WHERE u.username = 'erfan'
+        ORDER BY e.time DESC;`,
       );
       res.status(200).json(result.rows);
     } finally {
