@@ -415,6 +415,120 @@ app.prepare().then(() => {
     }
   });
 
+  server.get('/api/service-last-activity/:serviceName', async (_req, res) => {
+    const client = await pool.connect();
+    const { serviceName } = _req.params;
+    try {
+      const result = await client.query(
+        `SELECT MAX(e.time) AS last_activity
+        FROM public.events e
+        INNER JOIN public.services s
+        ON e.service = s.id
+        INNER JOIN public.users u
+        ON e.user = u.id
+        WHERE s.name = $1
+        AND u.username = 'erfan';`,
+        [serviceName],
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get(
+    '/api/count-service-permissions-by-sensitivity/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT assets.sensitivity AS sensitivity, COUNT(*) AS count
+          FROM public.authorizations a
+          INNER JOIN public.services s
+          ON a.service = s.id
+          INNER JOIN public.assets assets
+          ON a.asset = assets.id
+          INNER JOIN public.users u
+          ON a.user = u.id
+          WHERE u.username = 'erfan'
+          AND s.name = $1
+          GROUP BY assets.sensitivity;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get(
+    '/api/count-service-permissions-by-week/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT date_part('week', e.time) AS week, COUNT(*) AS count
+          FROM public.events e
+          INNER JOIN public.event_types et
+          ON e.type = et.id
+          INNER JOIN public.services s
+          ON e.service = s.id
+          INNER JOIN public.users u
+          ON e.user = u.id
+          WHERE e.time >= NOW() - INTERVAL '4 weeks'
+          AND et.name = 'grant'
+          AND s.name = $1
+          AND u.username = 'erfan'
+          GROUP BY week;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get('/api/service-permissions/:serviceName', async (_req, res) => {
+    const client = await pool.connect();
+    const { serviceName } = _req.params;
+    try {
+      const result = await client.query(
+        `SELECT
+          a.id AS id,
+          assets.name AS asset,
+          assets.sensitivity AS sensitivity,
+          (
+            SELECT MAX(e.time)
+            FROM public.events e
+            INNER JOIN public.event_types et
+            ON e.type = et.id
+            WHERE e.service = a.service
+            AND e.asset = a.asset
+            AND e.user = a.user
+            AND et.name = 'grant'
+          ) AS time
+        FROM public.authorizations a
+        INNER JOIN public.services s
+        ON a.service = s.id
+        INNER JOIN public.assets assets
+        ON a.asset = assets.id
+        INNER JOIN public.users u
+        ON a.user = u.id
+        WHERE u.username = 'erfan'
+        AND s.name = $1
+        ORDER BY time DESC;`,
+        [serviceName],
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
   server.post('/api/export-data', async (req, res) => {
     const { data, format } = req.body;
     if (!data || !format) {
