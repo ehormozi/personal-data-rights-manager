@@ -8,8 +8,9 @@ import {
   BarElement,
 } from 'chart.js';
 import ServiceHeader from './components/server/service-header';
-import ServiceAnalyticsServer from './components/server/service-analytics-server';
-import ServicePermissionsTableServer from './components/server/service-permissions-table-server';
+import ServiceDetailsPermissionsServer from './components/server/service-details-permissions-server';
+import ServiceDetailsRequestsServer from './components/server/service-details-requests-server';
+import ServiceDetailsActivityServer from './components/server/service-details-activity-server';
 
 ChartJS.register(
   ArcElement,
@@ -50,8 +51,9 @@ export default function ServicePermissionsPage({
           logo={`https://img.logo.dev/${searchParams.service}.com?token=pk_R_PqZb2eSUafz-H25PKuwQ`}
           name={searchParams.service}
         />
-        <ServiceAnalyticsServer name={searchParams.service} />
-        <ServicePermissionsTableServer name={searchParams.service} />
+        <ServiceDetailsPermissionsServer name={searchParams.service} />
+        <ServiceDetailsRequestsServer name={searchParams.service} />
+        <ServiceDetailsActivityServer name={searchParams.service} />
       </div>
     );
   }

@@ -464,6 +464,62 @@ app.prepare().then(() => {
   );
 
   server.get(
+    '/api/count-service-requests-by-status/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT drs.name AS status, COUNT(*) AS count
+          FROM public.data_requests dr
+          INNER JOIN public.data_request_statuses drs
+          ON dr.status = drs.id
+          INNER JOIN public.services s
+          ON dr.service = s.id
+          INNER JOIN public.users u
+          ON dr.user = u.id
+          WHERE u.username = 'erfan'
+          AND s.name = $1
+          GROUP BY drs.name;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get(
+    '/api/count-service-activities-by-category/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT ec.name AS category, COUNT(*) AS count
+          FROM public.events e
+          INNER JOIN public.event_types et
+          ON e.type = et.id
+          INNER JOIN public.event_categories ec
+          ON et.category = ec.id
+          INNER JOIN public.services s
+          ON e.service = s.id
+          INNER JOIN public.users u
+          ON e.user = u.id
+          WHERE u.username = 'erfan'
+          AND s.name = $1
+          GROUP BY ec.name;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get(
     '/api/count-service-permissions-by-week/:serviceName',
     async (_req, res) => {
       const client = await pool.connect();
@@ -480,6 +536,62 @@ app.prepare().then(() => {
           ON e.user = u.id
           WHERE e.time >= NOW() - INTERVAL '4 weeks'
           AND et.name = 'grant'
+          AND s.name = $1
+          AND u.username = 'erfan'
+          GROUP BY week;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get(
+    '/api/count-service-requests-by-week/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT date_part('week', dr.created_at) AS week, COUNT(*) AS count
+          FROM public.data_requests dr
+          INNER JOIN public.data_request_statuses drs
+          ON dr.status = drs.id
+          INNER JOIN public.services s
+          ON dr.service = s.id
+          INNER JOIN public.users u
+          ON dr.user = u.id
+          WHERE dr.created_at >= NOW() - INTERVAL '4 weeks'
+          AND s.name = $1
+          AND u.username = 'erfan'
+          GROUP BY week;`,
+          [serviceName],
+        );
+        res.status(200).json(result.rows);
+      } finally {
+        client.release();
+      }
+    },
+  );
+
+  server.get(
+    '/api/count-service-activities-by-week/:serviceName',
+    async (_req, res) => {
+      const client = await pool.connect();
+      const { serviceName } = _req.params;
+      try {
+        const result = await client.query(
+          `SELECT date_part('week', e.time) AS week, COUNT(*) AS count
+          FROM public.events e
+          INNER JOIN public.event_types et
+          ON e.type = et.id
+          INNER JOIN public.services s
+          ON e.service = s.id
+          INNER JOIN public.users u
+          ON e.user = u.id
+          WHERE e.time >= NOW() - INTERVAL '4 weeks'
           AND s.name = $1
           AND u.username = 'erfan'
           GROUP BY week;`,
@@ -521,6 +633,77 @@ app.prepare().then(() => {
         WHERE u.username = 'erfan'
         AND s.name = $1
         ORDER BY time DESC;`,
+        [serviceName],
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/service-requests/:serviceName', async (_req, res) => {
+    const client = await pool.connect();
+    const { serviceName } = _req.params;
+    try {
+      const result = await client.query(
+        `SELECT dr.id AS id, drt.name AS type, s.name AS service, a.name AS asset, drs.name AS status, dr.updated_at AS updated_at, dra.name AS action
+        FROM public.data_requests dr
+        INNER JOIN public.data_request_types drt
+        ON dr.type = drt.id
+        INNER JOIN public.services s
+        ON dr.service = s.id
+        INNER JOIN public.assets a
+        ON dr.asset = a.id
+        INNER JOIN public.data_request_statuses drs
+        ON dr.status = drs.id
+        LEFT JOIN public.data_request_status_action_map drsam
+        ON dr.status = drsam.status
+        LEFT JOIN public.data_request_actions dra
+        ON drsam.action = dra.id
+        INNER JOIN public.users u
+        ON dr.user = u.id
+        WHERE u.username = 'erfan'
+        AND s.name = $1
+        ORDER BY dr.updated_at DESC;`,
+        [serviceName],
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
+  server.get('/api/service-activity/:serviceName', async (_req, res) => {
+    const client = await pool.connect();
+    const { serviceName } = _req.params;
+    try {
+      const result = await client.query(
+        `SELECT
+          e.id AS id,
+          e.time AS time,
+          ec.name AS category,
+          et.label AS event,
+          et.description AS details,
+          s.name AS service,
+          ea.name AS action
+        FROM public.events e
+        INNER JOIN public.event_types et
+        ON e.type = et.id
+        INNER JOIN public.event_categories ec
+        ON et.category = ec.id
+        LEFT JOIN public.data_requests dr
+        ON e.request = dr.id
+        LEFT JOIN public.services s
+        ON e.service = s.id
+        LEFT JOIN public.event_type_action_map etam
+        ON et.id = etam.event_type
+        LEFT JOIN public.event_actions ea
+        ON etam.event_action = ea.id
+        INNER JOIN public.users u
+        ON e.user = u.id
+        WHERE u.username = 'erfan'
+        AND s.name = $1
+        ORDER BY e.time DESC;`,
         [serviceName],
       );
       res.status(200).json(result.rows);

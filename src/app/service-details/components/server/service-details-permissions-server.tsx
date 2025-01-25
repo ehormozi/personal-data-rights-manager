@@ -1,8 +1,18 @@
-import ServicePermissionsTableClient from '../client/service-permissions-table-client';
+import ServiceDetailsPermissionsClient from '../client/service-details-permissions-client';
 
-export default async function ServicePermissionsTableServer(props: {
+export default async function ServiceDetailsPermissionsServer(props: {
   name: string;
 }) {
+  const responseSensitivity = await fetch(
+    `http://localhost:3001/api/count-service-permissions-by-sensitivity/${props.name}`,
+  );
+  const dataSensitivity = await responseSensitivity.json();
+
+  const responseWeek = await fetch(
+    `http://localhost:3001/api/count-service-permissions-by-week/${props.name}`,
+  );
+  const dataWeek = await responseWeek.json();
+
   const response = await fetch(
     `http://localhost:3001/api/service-permissions/${props.name}`,
   );
@@ -62,7 +72,9 @@ export default async function ServicePermissionsTableServer(props: {
     return 0;
   });
   return (
-    <ServicePermissionsTableClient
+    <ServiceDetailsPermissionsClient
+      countBySensitivity={dataSensitivity}
+      countByWeek={dataWeek}
       assets={distinctAssets}
       data={data}
       prefilter={props.name}
