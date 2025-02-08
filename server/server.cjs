@@ -713,6 +713,22 @@ app.prepare().then(() => {
     }
   });
 
+  server.get('/api/faqs', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT f.id AS id, f.question AS question, f.answer AS answer, fc.name as category
+        FROM public.faqs f
+        INNER JOIN public.faq_categories fc
+        ON f.category_id = fc.id
+        ORDER BY f.category_id ASC;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
   server.post('/api/export-data', async (req, res) => {
     const { data, format } = req.body;
     if (!data || !format) {

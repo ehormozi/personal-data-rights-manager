@@ -1,5 +1,5 @@
 import ContactUs from './components/server/contact-us';
-import FAQ from './components/server/faq';
+import FAQServer from './components/server/faq-server';
 import YourSupportHistory from './components/server/your-support-history';
 
 export default function HelpSupportPage() {
@@ -13,7 +13,7 @@ export default function HelpSupportPage() {
           <ContactUs />
         </div>
         <div className="basis-1/2 space-y-4">
-          <FAQ />
+          <FAQServer />
         </div>
       </div>
       <YourSupportHistory />
