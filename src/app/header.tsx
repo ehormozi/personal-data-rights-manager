@@ -38,6 +38,11 @@ export default function Header(props: { currentPage: string }) {
       href: '/activity-log',
       current: props.currentPage === 'activity-log',
     },
+    {
+      name: 'Help & Support',
+      href: '/help-support',
+      current: props.currentPage === 'help-support',
+    },
   ];
 
   return (

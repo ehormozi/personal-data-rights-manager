@@ -6,6 +6,7 @@ const next = require('next');
 const { Parser } = require('json2csv');
 const ExcelJS = require('exceljs');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -756,6 +757,41 @@ app.prepare().then(() => {
     } catch (error) {
       console.error('Error generating export file:', error);
       res.status(500).json({ error: 'Failed to generate export file.' });
+    }
+  });
+
+  server.post('/api/handle-contact-form', async (req, res) => {
+    const { name, email, message } = req.body;
+    // Validate input
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+    try {
+      // Store message in database
+      await pool.query(
+        `INSERT INTO 
+        contact_messages (name, email, message, created_at)
+        VALUES ($1, $2, $3, NOW())`,
+        [name, email, message],
+      );
+      // Send confirmation email
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'We received your message',
+        text: `Hi ${name},\n\nThank you for reaching out! Our team will get back to you shortly.\n\nBest,\nSupport Team`,
+      });
+      res.status(200).json({ message: 'Message sent successfully!' });
+    } catch (error) {
+      console.error('Error processing contact form:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   });
 
