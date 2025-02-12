@@ -729,6 +729,30 @@ app.prepare().then(() => {
     }
   });
 
+  server.get('/api/user-support-requests', async (_req, res) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT
+          sr.id AS id,
+          sr.subject AS subject,
+          sr.message AS message,
+          srs.name as status,
+          sr.updated_at AS updated_at
+        FROM public.support_requests sr
+        INNER JOIN public.support_request_statuses srs
+        ON sr.status = srs.id
+        INNER JOIN public.users u
+        ON sr.user = u.id
+        WHERE u.username = 'erfan'
+        ORDER BY sr.updated_at DESC;`,
+      );
+      res.status(200).json(result.rows);
+    } finally {
+      client.release();
+    }
+  });
+
   server.post('/api/export-data', async (req, res) => {
     const { data, format } = req.body;
     if (!data || !format) {

@@ -1,6 +1,6 @@
 import ContactUs from './components/server/contact-us';
 import FAQServer from './components/server/faq-server';
-import YourSupportHistory from './components/server/your-support-history';
+import SupportHistoryServer from './components/server/support-history-server';
 
 export default function HelpSupportPage() {
   return (
@@ -16,7 +16,7 @@ export default function HelpSupportPage() {
           <FAQServer />
         </div>
       </div>
-      <YourSupportHistory />
+      <SupportHistoryServer />
     </div>
   );
 }
