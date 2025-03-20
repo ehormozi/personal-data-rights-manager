@@ -1,16 +1,20 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
   Menu,
   MenuButton,
-  MenuItem,
-  MenuItems,
 } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
+
 import TopNavigation from '../components/server/top-navigation';
+import MenuItem from '@/components/material/menu-item';
+import { useAuth } from '@/context/auth-context';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -44,6 +48,23 @@ export default function Header(props: { currentPage: string }) {
       current: props.currentPage === 'help-support',
     },
   ];
+
+  const [showMenuItems, setShowMenuItems] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const { user, logout } = useAuth();
+
+  const handleLogout: any = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await logout().then(() => router.push('/login'));
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setShowMenuItems(false);
+    }
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-950">
@@ -101,7 +122,10 @@ export default function Header(props: { currentPage: string }) {
             </button>
             <Menu as="div" className="relative ml-3">
               <div>
-                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <MenuButton
+                  className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  onClick={() => setShowMenuItems(!showMenuItems)}
+                >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   {
@@ -114,35 +138,24 @@ export default function Header(props: { currentPage: string }) {
                   }
                 </MenuButton>
               </div>
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-              >
-                <MenuItem>
-                  <a
+              {showMenuItems && (
+                <div
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  role="menu"
+                  tabIndex={0}
+                  data-open=""
+                >
+                  <MenuItem
+                    label="Profile & Security"
                     href="/profile-security"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                  >
-                    Profile & Security
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
+                  ></MenuItem>
+                  <MenuItem
+                    label="Sign out"
                     href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                  >
-                    Help
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
+                    onClick={handleLogout}
+                  ></MenuItem>
+                </div>
+              )}
             </Menu>
           </div>
         </div>

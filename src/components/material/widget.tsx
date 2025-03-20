@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export default function Widget(props: {
   showHeader?: boolean;
-  title: string;
+  title?: string;
   children: ReactNode;
   className?: string;
 }) {

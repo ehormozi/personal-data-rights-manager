@@ -36,7 +36,6 @@ export default function PermissionsSummaryClient(props: {
 
   const confirmRevokeAll = () => {
     console.log(`Revoking all permissions for ${selectedService}`);
-    // Call API to revoke permissions
     setShowDialog(false);
   };
 

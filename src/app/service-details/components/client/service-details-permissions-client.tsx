@@ -52,7 +52,6 @@ export default function ServiceDetailsPermissionsClient(props: {
   const totalPermissions =
     highSensitivityCount + mediumSensitivityCount + lowSensitivityCount;
 
-  // Pie Chart Data
   const pieData = {
     labels: ['High Sensitivity', 'Medium Sensitivity', 'Low Sensitivity'],
     datasets: [
@@ -62,7 +61,7 @@ export default function ServiceDetailsPermissionsClient(props: {
           mediumSensitivityCount,
           lowSensitivityCount,
         ],
-        backgroundColor: ['#EF4444', '#FBBF24', '#10B981'], // Red, Yellow, Green
+        backgroundColor: ['#EF4444', '#FBBF24', '#10B981'],
         borderWidth: 1,
       },
     ],
@@ -91,8 +90,8 @@ export default function ServiceDetailsPermissionsClient(props: {
         enabled: true,
         callbacks: {
           label: function (tooltipItem: { raw: any; label: any }) {
-            const value = tooltipItem.raw; // Value for the hovered section
-            const percentage = ((value / totalPermissions) * 100).toFixed(2); // Calculate percentage
+            const value = tooltipItem.raw;
+            const percentage = ((value / totalPermissions) * 100).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
           },
         },
@@ -102,14 +101,13 @@ export default function ServiceDetailsPermissionsClient(props: {
     maintainAspectRatio: false,
   };
 
-  // Bar Chart Data
   const barData = {
     labels: props.countByWeek.map((entry) => `Week ${entry.week}`),
     datasets: [
       {
         label: 'Permissions Granted',
         data: props.countByWeek.map((entry) => entry.count),
-        backgroundColor: '#3B82F6', // Blue
+        backgroundColor: '#3B82F6',
         borderWidth: 1,
       },
     ],
@@ -256,7 +254,6 @@ export default function ServiceDetailsPermissionsClient(props: {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log('Export successful');
       } else {
         console.log(response);
         console.error('Export failed');

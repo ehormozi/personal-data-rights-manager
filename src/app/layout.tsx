@@ -6,6 +6,7 @@ import './globals.css';
 import Header from './header';
 import Footer from './footer';
 import { usePathname } from 'next/navigation';
+import { AuthProvider } from '@/context/auth-context';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,12 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-gray-50 text-gray-900`}
       >
         <ReduxProvider>
-          <Header currentPage={currentPage} />
-          {children}
-          <Footer />
+          <AuthProvider>
+            <Header currentPage={currentPage} />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer />
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

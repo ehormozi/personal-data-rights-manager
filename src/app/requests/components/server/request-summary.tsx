@@ -1,14 +1,33 @@
+import { cookies } from 'next/headers';
+
 import Widget from '@/components/material/widget';
 
 export default async function RequestSummary() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
   const responseCountAll = await fetch(
     'http://localhost:3001/api/count-all-requests',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataCountAll = await responseCountAll.json();
   const countAll: number = dataCountAll[0].count;
 
   const responseCountByStatus = await fetch(
     'http://localhost:3001/api/count-requests-by-status',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataCountByStatus = await responseCountByStatus.json();
 

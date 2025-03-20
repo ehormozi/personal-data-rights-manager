@@ -13,7 +13,6 @@ interface FAQ {
 export default function FAQClient(props: { data: FAQ[] }) {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
-  // Group FAQs by category
   const groupedFAQs: Record<string, FAQ[]> = props.data.reduce(
     (acc: { [x: string]: any[] }, faq: { category: string }) => {
       acc[faq.category] = acc[faq.category] || [];

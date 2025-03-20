@@ -42,13 +42,12 @@ export default function ServiceDetailsActivityClient(props: {
   }[];
   prefilter?: string;
 }) {
-  // Pie Chart Data
   const pieData = {
     labels: props.countByCategory.map((e) => e.category),
     datasets: [
       {
         data: props.countByCategory.map((e) => e.count),
-        backgroundColor: ['#EF4444', '#FBBF24', '#10B981'], // Red, Yellow, Green
+        backgroundColor: ['#EF4444', '#FBBF24', '#10B981'],
         borderWidth: 1,
       },
     ],
@@ -77,8 +76,8 @@ export default function ServiceDetailsActivityClient(props: {
         enabled: true,
         callbacks: {
           label: function (tooltipItem: { raw: any; label: any }) {
-            const value = tooltipItem.raw; // Value for the hovered section
-            const percentage = ((value / props.data.length) * 100).toFixed(2); // Calculate percentage
+            const value = tooltipItem.raw;
+            const percentage = ((value / props.data.length) * 100).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
           },
         },
@@ -88,14 +87,13 @@ export default function ServiceDetailsActivityClient(props: {
     maintainAspectRatio: false,
   };
 
-  // Bar Chart Data
   const barData = {
     labels: props.countByWeek.map((entry) => `Week ${entry.week}`),
     datasets: [
       {
         label: 'Number of events',
         data: props.countByWeek.map((entry) => entry.count),
-        backgroundColor: '#3B82F6', // Blue
+        backgroundColor: '#3B82F6',
         borderWidth: 1,
       },
     ],

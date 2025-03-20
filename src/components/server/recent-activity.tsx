@@ -16,6 +16,8 @@ import {
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { Key, ReactNode } from 'react';
+import { cookies } from 'next/headers';
+
 import Widget from '../material/widget';
 import WhiteBox from '../material/white-box';
 import Button from '../material/button';
@@ -73,57 +75,70 @@ function formattedDifference(time: string) {
 }
 
 export default async function RecentActivity() {
-  const response = await fetch('http://localhost:3001/api/recent-activity');
-  const data = await response.json();
-  return (
-    <Widget title="Recent Activity">
-      <div className="space-y-3 max-h-80 overflow-y-auto">
-        {data.map(
-          (
-            element: {
-              group: string;
-              type: string;
-              description: string;
-              time: string;
-              service: string | null;
-            },
-            index: Key,
-          ) => (
-            <WhiteBox
-              key={index}
-              className="flex p-2 justify-between items-center"
-            >
-              <div className="flex items-center space-x-3">
-                <span
-                  className={
-                    'p-2 bg-blue-100 rounded-full ' +
-                    colorByGroup[element.group]
-                  }
-                >
-                  {iconByType[element.type]}
-                </span>
-                <p className="text-gray-700 text-sm">
-                  {element.service
-                    ? element.description.replaceAll(
-                        '[Service Name]',
-                        element.service,
-                      )
-                    : element.description}
-                </p>
-              </div>
-              <div className="ml-2 text-right text-xs text-gray-500 whitespace-nowrap">
-                {formattedDifference(element.time)}{' '}
-              </div>
-            </WhiteBox>
-          ),
-        )}
-      </div>
-      <Button
-        text="View Full Activity Log"
-        color="bg-blue-600"
-        hover="hover:bg-blue-700"
-        className="w-full mt-4"
-      />
-    </Widget>
-  );
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
+  const response = await fetch('http://localhost:3001/api/recent-activity', {
+    method: 'GET',
+    credentials: 'include',
+    headers: { Cookie: `connect.sid=${sessionCookie}` },
+  });
+  if (response.status === 200) {
+    const data = await response.json();
+    return (
+      <Widget title="Recent Activity">
+        <div className="space-y-3 max-h-80 overflow-y-auto">
+          {data.map(
+            (
+              element: {
+                group: string;
+                type: string;
+                description: string;
+                time: string;
+                service: string | null;
+              },
+              index: Key,
+            ) => (
+              <WhiteBox
+                key={index}
+                className="flex p-2 justify-between items-center"
+              >
+                <div className="flex items-center space-x-3">
+                  <span
+                    className={
+                      'p-2 bg-blue-100 rounded-full ' +
+                      colorByGroup[element.group]
+                    }
+                  >
+                    {iconByType[element.type]}
+                  </span>
+                  <p className="text-gray-700 text-sm">
+                    {element.service
+                      ? element.description.replaceAll(
+                          '[Service Name]',
+                          element.service,
+                        )
+                      : element.description}
+                  </p>
+                </div>
+                <div className="ml-2 text-right text-xs text-gray-500 whitespace-nowrap">
+                  {formattedDifference(element.time)}{' '}
+                </div>
+              </WhiteBox>
+            ),
+          )}
+        </div>
+        <Button
+          text="View Full Activity Log"
+          color="bg-blue-600"
+          hover="hover:bg-blue-700"
+          className="w-full mt-4"
+        />
+      </Widget>
+    );
+  }
 }

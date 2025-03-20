@@ -1,10 +1,24 @@
+import { cookies } from 'next/headers';
+
 import PermissionsDetailsClient from '../client/permissions-details-client';
 
 export default async function PermissionsDetailsServer(props: {
   prefilter?: string;
 }) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
   const response = await fetch(
     'http://localhost:3001/api/all-user-authorizations',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const data = await response.json();
 

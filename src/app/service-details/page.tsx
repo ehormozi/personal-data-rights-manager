@@ -7,6 +7,8 @@ import {
   LinearScale,
   BarElement,
 } from 'chart.js';
+
+import ProtectedPage from '@/components/material/protected-page';
 import ServiceHeader from './components/server/service-header';
 import ServiceDetailsPermissionsServer from './components/server/service-details-permissions-server';
 import ServiceDetailsRequestsServer from './components/server/service-details-requests-server';
@@ -46,15 +48,17 @@ export default function ServicePermissionsPage({
 }) {
   if (typeof searchParams.service === 'string') {
     return (
-      <div className="p-6 space-y-6 bg-neutral-100">
-        <ServiceHeader
-          logo={`https://img.logo.dev/${searchParams.service}.com?token=pk_R_PqZb2eSUafz-H25PKuwQ`}
-          name={searchParams.service}
-        />
-        <ServiceDetailsPermissionsServer name={searchParams.service} />
-        <ServiceDetailsRequestsServer name={searchParams.service} />
-        <ServiceDetailsActivityServer name={searchParams.service} />
-      </div>
+      <ProtectedPage>
+        <div className="p-6 space-y-6 bg-neutral-100">
+          <ServiceHeader
+            logo={`https://img.logo.dev/${searchParams.service}.com?token=pk_R_PqZb2eSUafz-H25PKuwQ`}
+            name={searchParams.service}
+          />
+          <ServiceDetailsPermissionsServer name={searchParams.service} />
+          <ServiceDetailsRequestsServer name={searchParams.service} />
+          <ServiceDetailsActivityServer name={searchParams.service} />
+        </div>
+      </ProtectedPage>
     );
   }
 }

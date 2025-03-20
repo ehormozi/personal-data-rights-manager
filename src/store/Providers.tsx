@@ -1,5 +1,4 @@
-// src/store/Providers.tsx
-'use client'; // Important to make this component client-side
+'use client';
 
 import { Provider } from 'react-redux';
 import store from './index';

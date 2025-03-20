@@ -48,12 +48,12 @@ export default function YourDataAtAGlanceClient(props: {
         enabled: true,
         callbacks: {
           label: function (tooltipItem: { raw: any; label: any }) {
-            const value = tooltipItem.raw; // Value for the hovered section
+            const value = tooltipItem.raw;
             const percentage = (
               (value /
                 props.values.reduce((sum, current) => sum + current, 0)) *
               100
-            ).toFixed(2); // Calculate percentage
+            ).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
           },
         },
@@ -66,12 +66,10 @@ export default function YourDataAtAGlanceClient(props: {
   return (
     <Widget title="Your Data at a Glance">
       <div className="flex flex-col md:flex-row items-center gap-6">
-        {/* Pie Chart */}
         <div className="w-full md:w-1/2 h-64">
           <Pie data={data} options={options} />
         </div>
 
-        {/* Data Summary */}
         <WhiteBox className="p-4 space-y-2">
           <p className="text-gray-700 text-sm font-medium">
             Here&apos;s a breakdown of your shared data:

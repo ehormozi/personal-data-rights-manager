@@ -1,20 +1,44 @@
+import { cookies } from 'next/headers';
+
 import Widget from '@/components/material/widget';
 
 export default async function PermissionsOverview() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
   const responseTotalPermissions = await fetch(
     'http://localhost:3001/api/count-all-authorizations',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataTotalPermissions = await responseTotalPermissions.json();
   const totalPermissions: number = dataTotalPermissions[0].count;
 
   const responseSensitivePermissions = await fetch(
     'http://localhost:3001/api/count-sensitive-authorizations',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataSensitivePermissions = await responseSensitivePermissions.json();
   const sensitivePermissions: number = dataSensitivePermissions[0].count;
 
   const responseTopService = await fetch(
     'http://localhost:3001/api/top-service',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataTopService = await responseTopService.json();
   const topService: string = dataTopService[0].service;

@@ -1,8 +1,22 @@
+import { cookies } from 'next/headers';
+
 import SupportHistoryClient from '../client/support-history-client';
 
 export default async function SupportHistoryServer() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
   const response = await fetch(
     'http://localhost:3001/api/user-support-requests',
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const data = await response.json();
 

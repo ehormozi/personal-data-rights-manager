@@ -1,20 +1,44 @@
+import { cookies } from 'next/headers';
+
 import ServiceDetailsPermissionsClient from '../client/service-details-permissions-client';
 
 export default async function ServiceDetailsPermissionsServer(props: {
   name: string;
 }) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
   const responseSensitivity = await fetch(
     `http://localhost:3001/api/count-service-permissions-by-sensitivity/${props.name}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataSensitivity = await responseSensitivity.json();
 
   const responseWeek = await fetch(
     `http://localhost:3001/api/count-service-permissions-by-week/${props.name}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const dataWeek = await responseWeek.json();
 
   const response = await fetch(
     `http://localhost:3001/api/service-permissions/${props.name}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Cookie: `connect.sid=${sessionCookie}` },
+    },
   );
   const data = await response.json();
 

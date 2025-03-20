@@ -19,7 +19,7 @@ export default function PermissionTrendsClient(props: {
   granted: number[];
   revoked: number[];
 }) {
-  const chartRef = useRef<any>(null); // Adjusted type to 'any'
+  const chartRef = useRef<any>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,7 +36,7 @@ export default function PermissionTrendsClient(props: {
   }, []);
 
   const data = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Time intervals
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
     datasets: [
       {
         label: 'Permissions Granted',

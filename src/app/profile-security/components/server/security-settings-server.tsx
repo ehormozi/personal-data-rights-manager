@@ -1,21 +1,19 @@
 import { cookies } from 'next/headers';
 
-import FAQClient from '../client/faq-client';
+import SecuritySettingsClient from '../client/security-settings-client';
 
-export default async function FAQServer() {
+export default async function SecuritySettingsServer() {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
-
   if (!sessionCookie) {
     return <p>Unauthorized</p>;
   }
-
-  const response = await fetch('http://localhost:3001/api/faqs', {
+  const response = await fetch('http://localhost:3001/api/user-mfa-enabled', {
     method: 'GET',
     credentials: 'include',
     headers: { Cookie: `connect.sid=${sessionCookie}` },
   });
   const data = await response.json();
-
-  return <FAQClient data={data} />;
+  const mfaEnabled: boolean = data[0].mfa_enabled;
+  return <SecuritySettingsClient twoFactorEnabled={mfaEnabled} />;
 }

@@ -1,7 +1,20 @@
+import { cookies } from 'next/headers';
+
 import Widget from '@/components/material/widget';
 
 export default async function ActivitySummary() {
-  const response = await fetch('http://localhost:3001/api/activity-summary');
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
+  const response = await fetch('http://localhost:3001/api/activity-summary', {
+    method: 'GET',
+    credentials: 'include',
+    headers: { Cookie: `connect.sid=${sessionCookie}` },
+  });
   const data = await response.json();
 
   const colorByCategory: Record<string, string> = {

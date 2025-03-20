@@ -1,7 +1,20 @@
+import { cookies } from 'next/headers';
+
 import RequestHistoryClient from '../client/request-history-client';
 
 export default async function RequestHistoryServer() {
-  const response = await fetch('http://localhost:3001/api/user-requests');
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('connect.sid')?.value;
+
+  if (!sessionCookie) {
+    return <p>Unauthorized</p>;
+  }
+
+  const response = await fetch('http://localhost:3001/api/user-requests', {
+    method: 'GET',
+    credentials: 'include',
+    headers: { Cookie: `connect.sid=${sessionCookie}` },
+  });
   const data = await response.json();
 
   let newData: {
