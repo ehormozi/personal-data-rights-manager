@@ -19,6 +19,10 @@ export default function NotificationPreferencesClient(props: {
     }));
   };
 
+  const handleUpdate = () => {
+    console.log('Updated Notification Preferences');
+  };
+
   return (
     <Widget title="Notification Preferences">
       <WhiteBox className="p-4 space-y-4">
@@ -38,6 +42,12 @@ export default function NotificationPreferencesClient(props: {
             </button>
           </div>
         ))}
+        <button
+          onClick={handleUpdate}
+          className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mt-4"
+        >
+          Update Notification Preferences
+        </button>
       </WhiteBox>
     </Widget>
   );
