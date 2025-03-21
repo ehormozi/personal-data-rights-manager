@@ -9,10 +9,10 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import { Key, ReactNode, useState } from 'react';
-import Widget from '../material/widget';
-import WhiteBox from '../material/white-box';
-import Button from '../material/button';
-import ConfirmationDialog from '../material/confirmation-dialog';
+import Widget from '../../../../components/server/widget';
+import WhiteBox from '../../../../components/server/white-box';
+import Button from '../../../../components/server/button';
+import ConfirmationDialog from '../../../../components/server/confirmation-dialog';
 
 const icons: Record<string, ReactNode> = {
   Instagram: <FaInstagram size={16} />,

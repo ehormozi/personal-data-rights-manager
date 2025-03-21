@@ -1,4 +1,4 @@
-import ProtectedPage from '@/app/dashboard/components/material/protected-page';
+import ProtectedPage from '@/components/client/protected-page';
 import ContactUs from './components/client/contact-us';
 import FAQServer from './components/server/faq-server';
 import SupportHistoryServer from './components/server/support-history-server';

@@ -1,5 +1,5 @@
-import Button from '../material/button';
-import Widget from '../material/widget';
+import Button from '../../../../components/server/button';
+import Widget from '../../../../components/server/widget';
 
 export default function QuickActions() {
   const actions = [

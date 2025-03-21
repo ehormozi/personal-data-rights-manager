@@ -1,4 +1,4 @@
-import ProtectedPage from '@/app/dashboard/components/material/protected-page';
+import ProtectedPage from '@/components/client/protected-page';
 import RequestSummary from './components/server/request-summary';
 import RequestHistoryServer from './components/server/request-history-server';
 

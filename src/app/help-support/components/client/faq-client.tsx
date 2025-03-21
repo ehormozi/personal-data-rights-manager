@@ -1,7 +1,7 @@
 'use client';
 
-import WhiteBox from '@/app/dashboard/components/material/white-box';
-import Widget from '@/app/dashboard/components/material/widget';
+import WhiteBox from '@/components/server/white-box';
+import Widget from '@/components/server/widget';
 import { useState } from 'react';
 
 interface FAQ {

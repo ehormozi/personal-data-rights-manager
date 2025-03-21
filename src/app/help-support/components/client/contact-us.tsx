@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import WhiteBox from '@/app/dashboard/components/material/white-box';
-import Widget from '@/app/dashboard/components/material/widget';
+import WhiteBox from '@/components/server/white-box';
+import Widget from '@/components/server/widget';
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({

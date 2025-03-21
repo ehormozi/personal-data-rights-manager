@@ -4,7 +4,7 @@ import QuickActions from './components/server/quick-actions';
 import RecentActivity from './components/server/recent-activity';
 import YourDataAtAGlanceServer from '@/app/dashboard/components/server/your-data-at-a-glance-server';
 import PermissionTrendsServer from '@/app/dashboard/components/server/permission-trends-server';
-import ProtectedPage from '@/app/dashboard/components/material/protected-page';
+import ProtectedPage from '@/components/client/protected-page';
 
 export default function Dashboard() {
   return (

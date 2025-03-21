@@ -10,8 +10,8 @@ import {
   LinearScale,
   Legend,
 } from 'chart.js';
-import Widget from '../material/widget';
-import WhiteBox from '../material/white-box';
+import Widget from '../../../../components/server/widget';
+import WhiteBox from '../../../../components/server/white-box';
 
 Chart.register(LineElement, PointElement, CategoryScale, LinearScale, Legend);
 

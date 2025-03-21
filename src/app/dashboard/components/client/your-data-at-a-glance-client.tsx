@@ -3,8 +3,8 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip } from 'chart.js';
-import Widget from '../material/widget';
-import WhiteBox from '../material/white-box';
+import Widget from '../../../../components/server/widget';
+import WhiteBox from '../../../../components/server/white-box';
 
 Chart.register(ArcElement, Tooltip);
 

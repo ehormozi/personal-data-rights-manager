@@ -18,9 +18,9 @@ import {
 import { Key, ReactNode } from 'react';
 import { cookies } from 'next/headers';
 
-import Widget from '../material/widget';
-import WhiteBox from '../material/white-box';
-import Button from '../material/button';
+import Widget from '../../../../components/server/widget';
+import WhiteBox from '../../../../components/server/white-box';
+import Button from '../../../../components/server/button';
 
 const iconByType: Record<string, ReactNode> = {
   data_breach: <ExclamationTriangleIcon className="h-6 w-6" />,

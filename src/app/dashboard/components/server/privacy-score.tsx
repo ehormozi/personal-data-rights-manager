@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
-import WhiteBox from '../material/white-box';
-import Widget from '../material/widget';
+import WhiteBox from '../../../../components/server/white-box';
+import Widget from '../../../../components/server/widget';
 
 export default async function PrivacyScore() {
   const cookieStore = await cookies();

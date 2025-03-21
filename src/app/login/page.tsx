@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { useLoading } from '@/context/loading-context';
 
-import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
+import LoadingSpinner from '@/components/server/loading-spinner';
 
 export default function Login() {
   const router = useRouter();

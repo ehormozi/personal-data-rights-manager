@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/context/auth-context';
-import LoadingSpinner from './loading-spinner';
+import LoadingSpinner from '../server/loading-spinner';
 
 export default function ProtectedPage({
   children,

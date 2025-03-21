@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import Widget from '@/app/dashboard/components/material/widget';
-import WhiteBox from '@/app/dashboard/components/material/white-box';
+import Widget from '@/components/server/widget';
+import WhiteBox from '@/components/server/white-box';
 
 export default function SecuritySettingsClient(props: {
   twoFactorEnabled: boolean;

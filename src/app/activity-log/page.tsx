@@ -1,6 +1,6 @@
 import ActivitySummary from './components/server/activity-summary';
 import ActivityHistoryServer from './components/server/activity-history-server';
-import ProtectedPage from '@/app/dashboard/components/material/protected-page';
+import ProtectedPage from '@/components/client/protected-page';
 
 export default function ActivityLog() {
   return (

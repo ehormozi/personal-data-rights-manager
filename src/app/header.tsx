@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
+
+import { useAuth } from '@/context/auth-context';
 import { useLoading } from '@/context/loading-context';
 
 import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
@@ -14,9 +17,8 @@ import {
 } from '@headlessui/react';
 
 import TopNavigation from './dashboard/components/server/top-navigation';
-import MenuItem from '@/app/dashboard/components/material/menu-item';
-import { useAuth } from '@/context/auth-context';
-import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
+import MenuItem from '@/components/client/menu-item';
+import LoadingSpinner from '@/components/server/loading-spinner';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');

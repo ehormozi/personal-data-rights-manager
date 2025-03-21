@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Widget from '@/app/dashboard/components/material/widget';
-import ConfirmationDialog from '@/app/dashboard/components/material/confirmation-dialog';
-import FileFormatDialog from '@/app/dashboard/components/material/file-format-dialog';
-import Datatable from '@/app/dashboard/components/material/datatable';
+import Widget from '@/components/server/widget';
+import ConfirmationDialog from '@/components/server/confirmation-dialog';
+import FileFormatDialog from '@/components/client/file-format-dialog';
+import Datatable from '@/components/client/datatable';
 
 export default function PermissionsDetailsClient(props: {
   services: string[];
@@ -84,9 +84,9 @@ export default function PermissionsDetailsClient(props: {
       selected: boolean;
     }[]
   >(
-    typeof props.prefilter === 'undefined'
-      ? [...props.data].map((row) => ({ ...row, selected: false }))
-      : [...props.data]
+    !props.prefilter
+      ? allData
+      : [...allData]
           .map((row) => ({ ...row, selected: false }))
           .filter((row) => row.service === props.prefilter),
   );
