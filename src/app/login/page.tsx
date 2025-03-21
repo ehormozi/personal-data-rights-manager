@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { useLoading } from '@/context/loading-context';
 
-import LoadingSpinner from '@/components/material/loading-spinner';
+import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
 
 export default function Login() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function Login() {
     setError('');
     try {
       await login(formData.email, formData.password).then(() =>
-        router.push('/'),
+        router.push('/dashboard'),
       );
     } catch (err: any) {
       setError(err.message);

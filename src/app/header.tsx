@@ -13,10 +13,10 @@ import {
   MenuButton,
 } from '@headlessui/react';
 
-import TopNavigation from '../components/server/top-navigation';
-import MenuItem from '@/components/material/menu-item';
+import TopNavigation from './dashboard/components/server/top-navigation';
+import MenuItem from '@/app/dashboard/components/material/menu-item';
 import { useAuth } from '@/context/auth-context';
-import LoadingSpinner from '@/components/material/loading-spinner';
+import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -26,7 +26,7 @@ export default function Header(props: { currentPage: string }) {
   const navigation = [
     {
       name: 'Dashboard',
-      href: '/',
+      href: '/dashboard',
       current: props.currentPage === 'dashboard',
     },
     {

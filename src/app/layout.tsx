@@ -9,7 +9,7 @@ import { LoadingProvider } from '@/context/loading-context';
 import './globals.css';
 import Header from './header';
 import Footer from './footer';
-import LoaderWrapper from '@/components/material/loader-wrapper';
+import LoaderWrapper from '@/app/dashboard/components/material/loader-wrapper';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

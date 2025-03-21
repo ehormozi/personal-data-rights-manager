@@ -12,11 +12,11 @@ import {
   Legend,
 } from 'chart.js';
 
-import Widget from '@/components/material/widget';
-import WhiteBox from '@/components/material/white-box';
-import ConfirmationDialog from '@/components/material/confirmation-dialog';
-import FileFormatDialog from '@/components/material/file-format-dialog';
-import Datatable from '@/components/material/datatable';
+import Widget from '@/app/dashboard/components/material/widget';
+import WhiteBox from '@/app/dashboard/components/material/white-box';
+import ConfirmationDialog from '@/app/dashboard/components/material/confirmation-dialog';
+import FileFormatDialog from '@/app/dashboard/components/material/file-format-dialog';
+import Datatable from '@/app/dashboard/components/material/datatable';
 
 Chart.register(
   ArcElement,

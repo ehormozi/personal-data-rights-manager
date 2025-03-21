@@ -1,4 +1,4 @@
-import ProtectedPage from '@/components/material/protected-page';
+import ProtectedPage from '@/app/dashboard/components/material/protected-page';
 import AccountInformationServer from './components/server/account-information-server';
 import SecuritySettingsServer from './components/server/security-settings-server';
 import NotificationPreferencesServer from './components/server/notification-preferences-server';

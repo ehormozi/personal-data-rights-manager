@@ -8,7 +8,7 @@ import {
   BarElement,
 } from 'chart.js';
 
-import ProtectedPage from '@/components/material/protected-page';
+import ProtectedPage from '@/app/dashboard/components/material/protected-page';
 import ServiceHeader from './components/server/service-header';
 import ServiceDetailsPermissionsServer from './components/server/service-details-permissions-server';
 import ServiceDetailsRequestsServer from './components/server/service-details-requests-server';

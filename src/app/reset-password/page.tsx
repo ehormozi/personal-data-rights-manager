@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 import { useLoading } from '@/context/loading-context';
 
-import LoadingSpinner from '@/components/material/loading-spinner';
+import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
 
 export default function ResetPassword() {
   const [formData, setFormData] = useState({

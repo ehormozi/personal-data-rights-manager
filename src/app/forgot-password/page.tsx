@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useLoading } from '@/context/loading-context';
 
-import LoadingSpinner from '@/components/material/loading-spinner';
+import LoadingSpinner from '@/app/dashboard/components/material/loading-spinner';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');

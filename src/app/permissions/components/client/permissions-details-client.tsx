@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Widget from '@/components/material/widget';
-import ConfirmationDialog from '@/components/material/confirmation-dialog';
-import FileFormatDialog from '@/components/material/file-format-dialog';
-import Datatable from '@/components/material/datatable';
+import Widget from '@/app/dashboard/components/material/widget';
+import ConfirmationDialog from '@/app/dashboard/components/material/confirmation-dialog';
+import FileFormatDialog from '@/app/dashboard/components/material/file-format-dialog';
+import Datatable from '@/app/dashboard/components/material/datatable';
 
 export default function PermissionsDetailsClient(props: {
   services: string[];

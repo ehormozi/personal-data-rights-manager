@@ -1,4 +1,4 @@
-import ProtectedPage from '@/components/material/protected-page';
+import ProtectedPage from '@/app/dashboard/components/material/protected-page';
 import PermissionsDetailsServer from './components/server/permissions-details-server';
 import PermissionsOverview from './components/server/permissions-overview';
 

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import Widget from '@/components/material/widget';
+import Widget from '@/app/dashboard/components/material/widget';
 
 export default async function ActivitySummary() {
   const cookieStore = await cookies();
