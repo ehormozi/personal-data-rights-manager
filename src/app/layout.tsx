@@ -1,12 +1,15 @@
 'use client';
 
 import localFont from 'next/font/local';
-import ReduxProvider from '../store/Providers';
+import { usePathname } from 'next/navigation';
+
+import { AuthProvider } from '@/context/auth-context';
+import { LoadingProvider } from '@/context/loading-context';
+
 import './globals.css';
 import Header from './header';
 import Footer from './footer';
-import { usePathname } from 'next/navigation';
-import { AuthProvider } from '@/context/auth-context';
+import LoaderWrapper from '@/components/material/loader-wrapper';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,13 +35,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-gray-50 text-gray-900`}
       >
-        <ReduxProvider>
+        <LoadingProvider>
           <AuthProvider>
-            <Header currentPage={currentPage} />
-            <main className="flex flex-1 flex-col">{children}</main>
-            <Footer />
+            <LoaderWrapper>
+              <Header currentPage={currentPage} />
+              <main className="flex flex-1 flex-col">{children}</main>
+              <Footer />
+            </LoaderWrapper>
           </AuthProvider>
-        </ReduxProvider>
+        </LoadingProvider>
       </body>
     </html>
   );

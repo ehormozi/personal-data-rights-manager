@@ -67,38 +67,6 @@ app.prepare().then(() => {
   server.use(express.json());
   server.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
-  server.post('/api/auth/register', async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const client = await pool.connect();
-      const query = `INSERT
-        INTO users (username, first_name, last_name, email, password_hash)
-        VALUES ($3, $1, $2, $3, $4)
-        RETURNING id`;
-      const result = await client.query(query, [
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
-      ]);
-      const userId = result.rows[0].id;
-      await client.query(
-        `INSERT INTO notification_preferences (user_id, notification_category, enabled)
-         SELECT $1, id, true FROM notification_categories`,
-        [userId],
-      );
-      client.release();
-      res.status(201).json({
-        message: 'User registered successfully',
-        userId: userId,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Error registering user' });
-    }
-  });
-
   server.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -137,20 +105,6 @@ app.prepare().then(() => {
     }
   });
 
-  server.get('/api/auth/account-info', requireAuth, async (req, res) => {
-    try {
-      const client = await pool.connect();
-      const result = await client.query(
-        'SELECT first_name, last_name, email FROM users WHERE id = $1',
-        [req.session.userId],
-      );
-      client.release();
-      res.json(result.rows[0]);
-    } catch (error) {
-      res.status(500).json({ error: 'Error fetching account info' });
-    }
-  });
-
   server.post('/api/auth/logout', requireAuth, async (req, res) => {
     try {
       const sessionId = req.session.id;
@@ -164,6 +118,52 @@ app.prepare().then(() => {
       });
     } catch (error) {
       res.status(500).json({ error: 'Error during logout' });
+    }
+  });
+
+  server.post('/api/auth/register', async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const client = await pool.connect();
+      const query = `INSERT
+        INTO users (username, first_name, last_name, email, password_hash)
+        VALUES ($3, $1, $2, $3, $4)
+        RETURNING id`;
+      const result = await client.query(query, [
+        firstName,
+        lastName,
+        email,
+        hashedPassword,
+      ]);
+      const userId = result.rows[0].id;
+      await client.query(
+        `INSERT INTO notification_preferences (user_id, notification_category, enabled)
+         SELECT $1, id, true FROM notification_categories`,
+        [userId],
+      );
+      client.release();
+      res.status(201).json({
+        message: 'User registered successfully',
+        userId: userId,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Error registering user' });
+    }
+  });
+
+  server.get('/api/auth/account-info', requireAuth, async (req, res) => {
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        'SELECT first_name, last_name, email FROM users WHERE id = $1',
+        [req.session.userId],
+      );
+      client.release();
+      res.json(result.rows[0]);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching account info' });
     }
   });
 
@@ -196,29 +196,6 @@ app.prepare().then(() => {
     }
   });
 
-  server.get('/api/auth/verify-reset-token', async (req, res) => {
-    const { token } = req.query;
-    try {
-      const client = await pool.connect();
-      const tokenQuery = await client.query(
-        'SELECT expires_at FROM password_reset_tokens WHERE token = $1',
-        [token],
-      );
-      client.release();
-      if (tokenQuery.rows.length === 0) {
-        return res.status(400).json({ error: 'Invalid token.' });
-      }
-      const { expires_at } = tokenQuery.rows[0];
-      if (new Date() > new Date(expires_at)) {
-        return res.status(400).json({ error: 'Token expired.' });
-      }
-      res.json({ valid: true });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error' });
-    }
-  });
-
   server.post('/api/auth/reset-password', async (req, res) => {
     const { token, newPassword } = req.body;
     try {
@@ -248,6 +225,29 @@ app.prepare().then(() => {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  server.get('/api/auth/verify-reset-token', async (req, res) => {
+    const { token } = req.query;
+    try {
+      const client = await pool.connect();
+      const tokenQuery = await client.query(
+        'SELECT expires_at FROM password_reset_tokens WHERE token = $1',
+        [token],
+      );
+      client.release();
+      if (tokenQuery.rows.length === 0) {
+        return res.status(400).json({ error: 'Invalid token.' });
+      }
+      const { expires_at } = tokenQuery.rows[0];
+      if (new Date() > new Date(expires_at)) {
+        return res.status(400).json({ error: 'Token expired.' });
+      }
+      res.json({ valid: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
     }
   });
 
