@@ -167,6 +167,28 @@ app.prepare().then(() => {
     }
   });
 
+  server.post(
+    '/api/auth/update-account-info',
+    requireAuth,
+    async (req, res) => {
+      const { firstName, lastName, email } = req.body;
+      try {
+        const client = await pool.connect();
+        await client.query(
+          `UPDATE users
+          SET first_name = $1, last_name = $2, email = $3
+          WHERE id = $4`,
+          [firstName, lastName, email, req.session.userId],
+        );
+        client.release();
+        res.json({ message: 'Account information updated successfully.' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    },
+  );
+
   server.post('/api/auth/forgot-password', async (req, res) => {
     const { email } = req.body;
     try {

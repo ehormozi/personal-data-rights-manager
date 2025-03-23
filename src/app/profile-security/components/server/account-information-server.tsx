@@ -15,14 +15,10 @@ const AccountInformationServer: React.FC = async () => {
   });
   const data = await response.json();
 
-  const handleUpdate = () => {
-    console.log('Updated User Data:', data.email);
-  };
-
   return (
     <AccountInformationClient
-      first_name={data.first_name}
-      last_name={data.last_name}
+      firstName={data.first_name}
+      lastName={data.last_name}
       email={data.email}
     />
   );
