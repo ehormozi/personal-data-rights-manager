@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 
+import { useAuth } from '@/context/auth-context';
+
 import WhiteBox from '@/components/server/white-box';
 import Widget from '@/components/server/widget';
 
 const ContactUs: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
     message: '',
   });
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState('');
+
+  const { user } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -29,6 +31,7 @@ const ContactUs: React.FC = () => {
         'http://localhost:3001/api/handle-contact-form',
         {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -36,13 +39,17 @@ const ContactUs: React.FC = () => {
             'Access-Control-Allow-Headers':
               'Origin, X-Requested-With, Content-Type, Accept',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            name: user?.firstName + ' ' + user?.lastName,
+            email: user?.email,
+          }),
         },
       );
       const result = await response.json();
       if (response.ok) {
         setResponseMessage(result.message);
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ message: '' });
       } else {
         setResponseMessage(result.error);
       }
@@ -56,28 +63,10 @@ const ContactUs: React.FC = () => {
     <Widget title="Contact Us">
       <WhiteBox className="p-4 h-[25rem] overflow-auto">
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            className="w-full p-2 border border-gray-300 rounded-lg"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            className="w-full p-2 border border-gray-300 rounded-lg"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
           <textarea
             name="message"
             placeholder="Your Message"
-            rows={4}
+            rows={12}
             className="w-full p-2 border border-gray-300 rounded-lg"
             value={formData.message}
             onChange={handleChange}

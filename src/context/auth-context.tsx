@@ -24,7 +24,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
         if (res.ok) {
           const data = await res.json();
-          setUser(data);
+          setUser({
+            firstName: data.first_name,
+            lastName: data.last_name,
+            email: data.email,
+          });
         }
       } catch (error) {
         console.error('Error fetching user session:', error);
