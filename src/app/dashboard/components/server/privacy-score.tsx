@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import WhiteBox from '../../../../components/server/white-box';
 import Widget from '../../../../components/server/widget';
 
-export default async function PrivacyScore() {
+const PrivacyScore: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -182,4 +182,6 @@ export default async function PrivacyScore() {
       </Widget>
     );
   }
-}
+};
+
+export default PrivacyScore;

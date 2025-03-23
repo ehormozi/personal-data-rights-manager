@@ -6,11 +6,7 @@ const navigation = [
   { name: 'Help', href: '#', current: false },
 ];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <Disclosure as="nav" className="bg-gray-950">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -35,4 +31,6 @@ export default function Footer() {
       </div>
     </Disclosure>
   );
-}
+};
+
+export default Footer;

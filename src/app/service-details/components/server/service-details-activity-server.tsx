@@ -2,9 +2,13 @@ import { cookies } from 'next/headers';
 
 import ServiceDetailsActivityClient from '../client/service-details-activity-client';
 
-export default async function ServiceDetailsActivityServer(props: {
+type ServiceDetailsActivityServerProps = {
   name: string;
-}) {
+};
+
+const ServiceDetailsActivityServer: React.FC<
+  ServiceDetailsActivityServerProps
+> = async ({ name }) => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -13,7 +17,7 @@ export default async function ServiceDetailsActivityServer(props: {
   }
 
   const responseCategory = await fetch(
-    `http://localhost:3001/api/count-service-activities-by-category/${props.name}`,
+    `http://localhost:3001/api/count-service-activities-by-category/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -23,7 +27,7 @@ export default async function ServiceDetailsActivityServer(props: {
   const dataCategory = await responseCategory.json();
 
   const responseWeek = await fetch(
-    `http://localhost:3001/api/count-service-activities-by-week/${props.name}`,
+    `http://localhost:3001/api/count-service-activities-by-week/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -33,7 +37,7 @@ export default async function ServiceDetailsActivityServer(props: {
   const dataWeek = await responseWeek.json();
 
   const response = await fetch(
-    `http://localhost:3001/api/service-activity/${props.name}`,
+    `http://localhost:3001/api/service-activity/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -145,7 +149,9 @@ export default async function ServiceDetailsActivityServer(props: {
       categories={distinctCategories}
       events={distinctEvents}
       data={newData}
-      prefilter={props.name}
+      prefilter={name}
     />
   );
-}
+};
+
+export default ServiceDetailsActivityServer;

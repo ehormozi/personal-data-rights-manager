@@ -74,7 +74,7 @@ function formattedDifference(time: string) {
   }
 }
 
-export default async function RecentActivity() {
+const RecentActivity: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -141,4 +141,6 @@ export default async function RecentActivity() {
       </Widget>
     );
   }
-}
+};
+
+export default RecentActivity;

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import SupportHistoryClient from '../client/support-history-client';
 
-export default async function SupportHistoryServer() {
+const SupportHistoryServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -64,4 +64,6 @@ export default async function SupportHistoryServer() {
   });
 
   return <SupportHistoryClient statuses={distinctStatuses} data={data} />;
-}
+};
+
+export default SupportHistoryServer;

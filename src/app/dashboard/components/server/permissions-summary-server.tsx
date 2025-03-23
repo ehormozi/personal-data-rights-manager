@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import PermissionsSummaryClient from '../client/permissions-summary client';
 
-export default async function PermissionsSummaryServer() {
+const PermissionsSummaryServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -23,4 +23,6 @@ export default async function PermissionsSummaryServer() {
     const data = await response.json();
     return <PermissionsSummaryClient data={data} />;
   }
-}
+};
+
+export default PermissionsSummaryServer;

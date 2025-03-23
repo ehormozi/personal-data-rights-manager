@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import FAQClient from '../client/faq-client';
 
-export default async function FAQServer() {
+const FAQServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -18,4 +18,6 @@ export default async function FAQServer() {
   const data = await response.json();
 
   return <FAQClient data={data} />;
-}
+};
+
+export default FAQServer;

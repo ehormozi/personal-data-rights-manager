@@ -8,10 +8,15 @@ import WhiteBox from '../../../../components/server/white-box';
 
 Chart.register(ArcElement, Tooltip);
 
-export default function YourDataAtAGlanceClient(props: {
+type YourDataAtAGlanceClientProps = {
   labels: string[];
   values: number[];
-}) {
+};
+
+const YourDataAtAGlanceClient: React.FC<YourDataAtAGlanceClientProps> = ({
+  labels,
+  values,
+}) => {
   const position:
     | 'bottom'
     | 'center'
@@ -24,10 +29,10 @@ export default function YourDataAtAGlanceClient(props: {
   const colors = ['#3b82f6', '#f59e0b', '#16a34a', '#dc2626'];
 
   const data = {
-    labels: props.labels,
+    labels: labels,
     datasets: [
       {
-        data: props.values,
+        data: values,
         backgroundColor: colors,
         hoverBackgroundColor: colors.map((color) => color + 'CC'),
       },
@@ -50,8 +55,7 @@ export default function YourDataAtAGlanceClient(props: {
           label: function (tooltipItem: { raw: any; label: any }) {
             const value = tooltipItem.raw;
             const percentage = (
-              (value /
-                props.values.reduce((sum, current) => sum + current, 0)) *
+              (value / values.reduce((sum, current) => sum + current, 0)) *
               100
             ).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
@@ -75,12 +79,12 @@ export default function YourDataAtAGlanceClient(props: {
             Here&apos;s a breakdown of your shared data:
           </p>
           <ul className="list-disc list-inside text-gray-500 text-sm">
-            {props.labels.map((label: string, index: number) => (
+            {labels?.map((label: string, index: number) => (
               <li key={index}>
                 {label}:{' '}
                 {Math.floor(
-                  (props.values[index] /
-                    props.values.reduce((sum, current) => sum + current, 0)) *
+                  (values[index] /
+                    values.reduce((sum, current) => sum + current, 0)) *
                     100,
                 )}
                 % of shared data
@@ -91,4 +95,6 @@ export default function YourDataAtAGlanceClient(props: {
       </div>
     </Widget>
   );
-}
+};
+
+export default YourDataAtAGlanceClient;

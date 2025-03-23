@@ -3,13 +3,19 @@
 import Widget from '@/components/server/widget';
 import WhiteBox from '@/components/server/white-box';
 
-export default function AccountInformationClient(props: {
+type AccountInformationClientProps = {
   first_name: string;
   last_name: string;
   email: string;
-}) {
+};
+
+const AccountInformationClient: React.FC<AccountInformationClientProps> = ({
+  first_name,
+  last_name,
+  email,
+}) => {
   const handleUpdate = () => {
-    console.log('Updated User Data:', props.email);
+    console.log('Updated User Data:', email);
   };
 
   return (
@@ -20,7 +26,7 @@ export default function AccountInformationClient(props: {
           <input
             type="text"
             name="firstName"
-            defaultValue={props.first_name}
+            defaultValue={first_name}
             className="w-full mt-1 p-2 border rounded-lg"
           />
         </label>
@@ -29,7 +35,7 @@ export default function AccountInformationClient(props: {
           <input
             type="text"
             name="lastName"
-            defaultValue={props.last_name}
+            defaultValue={last_name}
             className="w-full mt-1 p-2 border rounded-lg"
           />
         </label>
@@ -38,7 +44,7 @@ export default function AccountInformationClient(props: {
           <input
             type="email"
             name="email"
-            defaultValue={props.email}
+            defaultValue={email}
             className="w-full mt-1 p-2 border rounded-lg"
           />
         </label>
@@ -51,4 +57,6 @@ export default function AccountInformationClient(props: {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default AccountInformationClient;

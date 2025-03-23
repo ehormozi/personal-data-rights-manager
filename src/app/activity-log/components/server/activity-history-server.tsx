@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import ActivityHistoryClient from '../client/activity-history-client';
 
-export default async function ActivityHistoryServer() {
+const ActivityHistoryServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -113,4 +113,6 @@ export default async function ActivityHistoryServer() {
       data={newData}
     />
   );
-}
+};
+
+export default ActivityHistoryServer;

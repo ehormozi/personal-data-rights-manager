@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import AccountInformationClient from '../client/account-information-client';
 
-export default async function AccountInformationServer() {
+const AccountInformationServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
   if (!sessionCookie) {
@@ -26,4 +26,6 @@ export default async function AccountInformationServer() {
       email={data.email}
     />
   );
-}
+};
+
+export default AccountInformationServer;

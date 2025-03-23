@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import Widget from '@/components/server/widget';
 
-export default async function RequestSummary() {
+const RequestSummary: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -83,4 +83,6 @@ export default async function RequestSummary() {
       </div>
     </Widget>
   );
-}
+};
+
+export default RequestSummary;

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import NotificationPreferencesClient from '../client/notification-preferences-client';
 
-export default async function NotificationPreferencesServer() {
+const NotificationPreferencesServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
   if (!sessionCookie) {
@@ -24,7 +24,7 @@ export default async function NotificationPreferencesServer() {
     },
     {} as Record<string, boolean>,
   );
-  return (
-    <NotificationPreferencesClient notificationPreferences={dataTransformed} />
-  );
-}
+  return <NotificationPreferencesClient newPreferences={dataTransformed} />;
+};
+
+export default NotificationPreferencesServer;

@@ -10,10 +10,14 @@ interface FAQ {
   answer: string;
 }
 
-export default function FAQClient(props: { data: FAQ[] }) {
+type FAQClientProps = {
+  data: FAQ[];
+};
+
+const FAQClient: React.FC<FAQClientProps> = ({ data }) => {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
-  const groupedFAQs: Record<string, FAQ[]> = props.data.reduce(
+  const groupedFAQs: Record<string, FAQ[]> = data.reduce(
     (acc: { [x: string]: any[] }, faq: { category: string }) => {
       acc[faq.category] = acc[faq.category] || [];
       acc[faq.category].push(faq);
@@ -59,4 +63,6 @@ export default function FAQClient(props: { data: FAQ[] }) {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default FAQClient;

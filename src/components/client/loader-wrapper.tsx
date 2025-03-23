@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 
-import LoadingSpinner from '../server/loading-spinner';
+import LoadingSpinner from '@/components/server/loading-spinner';
 
 type LoaderWrapperProps = {
   children: React.ReactNode;

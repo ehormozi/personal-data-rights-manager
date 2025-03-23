@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import RequestHistoryClient from '../client/request-history-client';
 
-export default async function RequestHistoryServer() {
+const RequestHistoryServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -143,4 +143,6 @@ export default async function RequestHistoryServer() {
       data={newData}
     />
   );
-}
+};
+
+export default RequestHistoryServer;

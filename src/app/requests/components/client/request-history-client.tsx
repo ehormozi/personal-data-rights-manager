@@ -6,7 +6,7 @@ import ConfirmationDialog from '@/components/server/confirmation-dialog';
 import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
 
-export default function RequestHistoryClient(props: {
+type RequestHistoryClientProps = {
   types: string[];
   services: string[];
   assets: string[];
@@ -20,7 +20,15 @@ export default function RequestHistoryClient(props: {
     updated_at: string;
     action: string;
   }[];
-}) {
+};
+
+const RequestHistoryClient: React.FC<RequestHistoryClientProps> = ({
+  types,
+  services,
+  assets,
+  statuses,
+  data,
+}) => {
   const statusColors: Record<string, string> = {
     Pending: 'text-yellow-600',
     'In Progress': 'text-yellow-600',
@@ -40,7 +48,7 @@ export default function RequestHistoryClient(props: {
       label: 'Type',
       type: 'string',
       filter: true,
-      distinctValues: props.types,
+      distinctValues: types,
       placeholder: 'Select Type',
     },
     {
@@ -48,7 +56,7 @@ export default function RequestHistoryClient(props: {
       label: 'Service',
       type: 'string',
       filter: true,
-      distinctValues: props.services,
+      distinctValues: services,
       placeholder: 'Select Service',
     },
     {
@@ -56,7 +64,7 @@ export default function RequestHistoryClient(props: {
       label: 'Asset',
       type: 'string',
       filter: true,
-      distinctValues: props.assets,
+      distinctValues: assets,
       placeholder: 'Select Asset',
     },
     {
@@ -64,7 +72,7 @@ export default function RequestHistoryClient(props: {
       label: 'Status',
       type: 'string',
       filter: true,
-      distinctValues: props.statuses,
+      distinctValues: statuses,
       placeholder: 'Select Status',
       colorMap: statusColors,
     },
@@ -255,7 +263,7 @@ export default function RequestHistoryClient(props: {
       actions: any;
     }[]
   >(
-    [...props.data].map((row) => ({
+    [...data].map((row) => ({
       ...row,
       selected: false,
       actions: row.action.split(', ').map((action, index) => (
@@ -452,4 +460,6 @@ export default function RequestHistoryClient(props: {
       </section>
     </Widget>
   );
-}
+};
+
+export default RequestHistoryClient;

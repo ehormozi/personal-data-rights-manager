@@ -6,7 +6,7 @@ import ConfirmationDialog from '@/components/server/confirmation-dialog';
 import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
 
-export default function ActivityHistoryClient(props: {
+type ActivityHistoryClientProps = {
   categories: string[];
   events: string[];
   data: {
@@ -17,7 +17,13 @@ export default function ActivityHistoryClient(props: {
     details: string;
     action: string;
   }[];
-}) {
+};
+
+const ActivityHistoryClient: React.FC<ActivityHistoryClientProps> = ({
+  categories,
+  events,
+  data,
+}) => {
   const columns = [
     {
       key: 'time',
@@ -30,7 +36,7 @@ export default function ActivityHistoryClient(props: {
       label: 'Category',
       type: 'string',
       filter: true,
-      distinctValues: props.categories,
+      distinctValues: categories,
       placeholder: 'Select Category',
     },
     {
@@ -38,7 +44,7 @@ export default function ActivityHistoryClient(props: {
       label: 'Event',
       type: 'string',
       filter: true,
-      distinctValues: props.events,
+      distinctValues: events,
       placeholder: 'Select Event',
     },
     {
@@ -172,7 +178,7 @@ export default function ActivityHistoryClient(props: {
       actions: any;
     }[]
   >(
-    [...props.data].map((row) => ({
+    [...data].map((row) => ({
       ...row,
       selected: false,
       actions: row.action.split(', ').map((action, index) => (
@@ -356,4 +362,6 @@ export default function ActivityHistoryClient(props: {
       </section>
     </Widget>
   );
-}
+};
+
+export default ActivityHistoryClient;

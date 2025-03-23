@@ -7,7 +7,7 @@ import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
 import WhiteBox from '@/components/server/white-box';
 
-export default function SupportHistoryClient(props: {
+type SupportHistoryClientProps = {
   statuses: string[];
   data: {
     id: number;
@@ -16,7 +16,12 @@ export default function SupportHistoryClient(props: {
     status: string;
     updated_at: string;
   }[];
-}) {
+};
+
+const SupportHistoryClient: React.FC<SupportHistoryClientProps> = ({
+  statuses,
+  data,
+}) => {
   const statusColors: Record<string, string> = {
     Pending: 'bg-yellow-100 text-yellow-800',
     'In Progress': 'bg-blue-100 text-blue-800',
@@ -46,7 +51,7 @@ export default function SupportHistoryClient(props: {
       label: 'Status',
       type: 'string',
       filter: true,
-      distinctValues: props.statuses,
+      distinctValues: statuses,
       placeholder: 'Select Status',
       colorMap: statusColors,
     },
@@ -68,7 +73,7 @@ export default function SupportHistoryClient(props: {
       selected: boolean;
     }[]
   >(
-    [...props.data].map((row) => ({
+    [...data].map((row) => ({
       ...row,
       selected: false,
     })),
@@ -201,4 +206,6 @@ export default function SupportHistoryClient(props: {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default SupportHistoryClient;

@@ -15,10 +15,15 @@ import WhiteBox from '../../../../components/server/white-box';
 
 Chart.register(LineElement, PointElement, CategoryScale, LinearScale, Legend);
 
-export default function PermissionTrendsClient(props: {
+type PermissionTrendsClientProps = {
   granted: number[];
   revoked: number[];
-}) {
+};
+
+const PermissionTrendsClient: React.FC<PermissionTrendsClientProps> = ({
+  granted,
+  revoked,
+}) => {
   const chartRef = useRef<any>(null);
 
   useEffect(() => {
@@ -40,7 +45,7 @@ export default function PermissionTrendsClient(props: {
     datasets: [
       {
         label: 'Permissions Granted',
-        data: props.granted,
+        data: granted,
         borderColor: '#3b82f6',
         backgroundColor: 'rgba(59, 130, 246, 0.2)',
         tension: 0.4,
@@ -48,7 +53,7 @@ export default function PermissionTrendsClient(props: {
       },
       {
         label: 'Permissions Revoked',
-        data: props.revoked,
+        data: revoked,
         borderColor: '#ef4444',
         backgroundColor: 'rgba(239, 68, 68, 0.2)',
         tension: 0.4,
@@ -95,4 +100,6 @@ export default function PermissionTrendsClient(props: {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default PermissionTrendsClient;

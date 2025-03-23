@@ -6,7 +6,7 @@ import YourDataAtAGlanceClient from '../client/your-data-at-a-glance-client';
 
 Chart.register(ArcElement);
 
-export default async function YourDataAtAGlanceServer() {
+const YourDataAtAGlanceServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -46,4 +46,6 @@ export default async function YourDataAtAGlanceServer() {
     );
     return <YourDataAtAGlanceClient labels={labels} values={dataValues} />;
   }
-}
+};
+
+export default YourDataAtAGlanceServer;

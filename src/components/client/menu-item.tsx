@@ -2,33 +2,37 @@
 
 import React from 'react';
 
-export default function MenuItems(props: {
+type MenuItemsProps = {
   label: string;
   href: string;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
-}) {
-  if (props.onClick) {
+};
+
+const MenuItems: React.FC<MenuItemsProps> = ({ label, href, onClick }) => {
+  if (onClick) {
     return (
       <a
-        href={props.href}
+        href={href}
         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:outline-none"
         role="menuitem"
         tabIndex={-1}
-        onClick={props.onClick}
+        onClick={onClick}
       >
-        {props.label}
+        {label}
       </a>
     );
   } else {
     return (
       <a
-        href={props.href}
+        href={href}
         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:outline-none"
         role="menuitem"
         tabIndex={-1}
       >
-        {props.label}
+        {label}
       </a>
     );
   }
-}
+};
+
+export default MenuItems;

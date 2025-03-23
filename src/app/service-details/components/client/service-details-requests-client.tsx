@@ -27,7 +27,7 @@ Chart.register(
   Tooltip,
 );
 
-export default function ServiceDetailsRequestsClient(props: {
+type ServiceDetailsRequestsClientProps = {
   countByStatus: { status: string; count: number }[];
   countByWeek: { week: number; count: number }[];
   types: string[];
@@ -44,12 +44,25 @@ export default function ServiceDetailsRequestsClient(props: {
     action: string;
   }[];
   prefilter?: string;
-}) {
+};
+
+const ServiceDetailsRequestsClient: React.FC<
+  ServiceDetailsRequestsClientProps
+> = ({
+  countByStatus,
+  countByWeek,
+  types,
+  services,
+  assets,
+  statuses,
+  data,
+  prefilter,
+}) => {
   const pieData = {
-    labels: props.countByStatus.map((e) => e.status),
+    labels: countByStatus.map((e) => e.status),
     datasets: [
       {
-        data: props.countByStatus.map((e) => e.count),
+        data: countByStatus.map((e) => e.count),
         backgroundColor: ['#EF4444', '#FBBF24', '#10B981'],
         borderWidth: 1,
       },
@@ -80,7 +93,7 @@ export default function ServiceDetailsRequestsClient(props: {
         callbacks: {
           label: function (tooltipItem: { raw: any; label: any }) {
             const value = tooltipItem.raw;
-            const percentage = ((value / props.data.length) * 100).toFixed(2);
+            const percentage = ((value / data.length) * 100).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
           },
         },
@@ -91,11 +104,11 @@ export default function ServiceDetailsRequestsClient(props: {
   };
 
   const barData = {
-    labels: props.countByWeek.map((entry) => `Week ${entry.week}`),
+    labels: countByWeek.map((entry) => `Week ${entry.week}`),
     datasets: [
       {
         label: 'Data Requests Issued',
-        data: props.countByWeek.map((entry) => entry.count),
+        data: countByWeek.map((entry) => entry.count),
         backgroundColor: '#3B82F6',
         borderWidth: 1,
       },
@@ -121,7 +134,7 @@ export default function ServiceDetailsRequestsClient(props: {
       label: 'Type',
       type: 'string',
       filter: true,
-      distinctValues: props.types,
+      distinctValues: types,
       placeholder: 'Select Type',
     },
     {
@@ -129,7 +142,7 @@ export default function ServiceDetailsRequestsClient(props: {
       label: 'Service',
       type: 'string',
       filter: true,
-      distinctValues: props.services,
+      distinctValues: services,
       placeholder: 'Select Service',
     },
     {
@@ -137,7 +150,7 @@ export default function ServiceDetailsRequestsClient(props: {
       label: 'Asset',
       type: 'string',
       filter: true,
-      distinctValues: props.assets,
+      distinctValues: assets,
       placeholder: 'Select Asset',
     },
     {
@@ -145,7 +158,7 @@ export default function ServiceDetailsRequestsClient(props: {
       label: 'Status',
       type: 'string',
       filter: true,
-      distinctValues: props.statuses,
+      distinctValues: statuses,
       placeholder: 'Select Status',
       colorMap: statusColors,
     },
@@ -336,7 +349,7 @@ export default function ServiceDetailsRequestsClient(props: {
       actions: any;
     }[]
   >(
-    [...props.data].map((row) => ({
+    [...data].map((row) => ({
       ...row,
       selected: false,
       actions: row.action.split(', ').map((action, index) => (
@@ -465,7 +478,7 @@ export default function ServiceDetailsRequestsClient(props: {
     }
   };
 
-  if (props.data.length > 0) {
+  if (data.length > 0) {
     return (
       <Widget title="Data Requests">
         <div className="flex space-x-4">
@@ -555,4 +568,6 @@ export default function ServiceDetailsRequestsClient(props: {
       </Widget>
     );
   }
-}
+};
+
+export default ServiceDetailsRequestsClient;

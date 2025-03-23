@@ -27,7 +27,7 @@ Chart.register(
   Tooltip,
 );
 
-export default function ServiceDetailsPermissionsClient(props: {
+type ServiceDetailsPermissionsClientProps = {
   countBySensitivity: { sensitivity: number; count: number }[];
   countByWeek: { week: number; count: number }[];
   assets: string[];
@@ -39,14 +39,18 @@ export default function ServiceDetailsPermissionsClient(props: {
     time: string;
   }[];
   prefilter?: string;
-}) {
-  const highSensitivityCount = props.countBySensitivity.filter(
+};
+
+const ServiceDetailsPermissionsClient: React.FC<
+  ServiceDetailsPermissionsClientProps
+> = ({ countBySensitivity, countByWeek, assets, data, prefilter }) => {
+  const highSensitivityCount = countBySensitivity.filter(
     (e: { sensitivity: number; count: number }) => e.sensitivity === 3,
   ).length;
-  const mediumSensitivityCount = props.countBySensitivity.filter(
+  const mediumSensitivityCount = countBySensitivity.filter(
     (e: { sensitivity: number; count: number }) => e.sensitivity === 2,
   ).length;
-  const lowSensitivityCount = props.countBySensitivity.filter(
+  const lowSensitivityCount = countBySensitivity.filter(
     (e: { sensitivity: number; count: number }) => e.sensitivity === 1,
   ).length;
   const totalPermissions =
@@ -102,11 +106,11 @@ export default function ServiceDetailsPermissionsClient(props: {
   };
 
   const barData = {
-    labels: props.countByWeek.map((entry) => `Week ${entry.week}`),
+    labels: countByWeek.map((entry) => `Week ${entry.week}`),
     datasets: [
       {
         label: 'Permissions Granted',
-        data: props.countByWeek.map((entry) => entry.count),
+        data: countByWeek.map((entry) => entry.count),
         backgroundColor: '#3B82F6',
         borderWidth: 1,
       },
@@ -125,7 +129,7 @@ export default function ServiceDetailsPermissionsClient(props: {
       label: 'Asset',
       type: 'string',
       filter: true,
-      distinctValues: props.assets,
+      distinctValues: assets,
       placeholder: 'Filter by Permissions',
     },
     {
@@ -155,7 +159,7 @@ export default function ServiceDetailsPermissionsClient(props: {
       time: string;
       selected: boolean;
     }[]
-  >([...props.data].map((row) => ({ ...row, selected: false })));
+  >([...data].map((row) => ({ ...row, selected: false })));
 
   const [filteredData, setFilteredData] = useState<typeof allData>(allData);
 
@@ -386,4 +390,6 @@ export default function ServiceDetailsPermissionsClient(props: {
       </section>
     </Widget>
   );
-}
+};
+
+export default ServiceDetailsPermissionsClient;

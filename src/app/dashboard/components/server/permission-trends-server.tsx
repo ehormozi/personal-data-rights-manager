@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import PermissionTrendsClient from '../client/permission-trends-client';
 
-export default async function PermissionTrendsServer() {
+const PermissionTrendsServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -91,4 +91,6 @@ export default async function PermissionTrendsServer() {
 
     return <PermissionTrendsClient granted={granted} revoked={revoked} />;
   }
-}
+};
+
+export default PermissionTrendsServer;

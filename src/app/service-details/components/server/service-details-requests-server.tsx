@@ -2,9 +2,13 @@ import { cookies } from 'next/headers';
 
 import ServiceDetailsRequestsClient from '../client/service-details-requests-client';
 
-export default async function ServiceDetailsRequestsServer(props: {
+type ServiceDetailsRequestsServerProps = {
   name: string;
-}) {
+};
+
+const ServiceDetailsRequestsServer: React.FC<
+  ServiceDetailsRequestsServerProps
+> = async ({ name }) => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -13,7 +17,7 @@ export default async function ServiceDetailsRequestsServer(props: {
   }
 
   const responseStatus = await fetch(
-    `http://localhost:3001/api/count-service-requests-by-status/${props.name}`,
+    `http://localhost:3001/api/count-service-requests-by-status/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -23,7 +27,7 @@ export default async function ServiceDetailsRequestsServer(props: {
   const dataStatus = await responseStatus.json();
 
   const responseWeek = await fetch(
-    `http://localhost:3001/api/count-service-requests-by-week/${props.name}`,
+    `http://localhost:3001/api/count-service-requests-by-week/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -33,7 +37,7 @@ export default async function ServiceDetailsRequestsServer(props: {
   const dataWeek = await responseWeek.json();
 
   const response = await fetch(
-    `http://localhost:3001/api/service-requests/${props.name}`,
+    `http://localhost:3001/api/service-requests/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -146,4 +150,6 @@ export default async function ServiceDetailsRequestsServer(props: {
       data={data}
     />
   );
-}
+};
+
+export default ServiceDetailsRequestsServer;

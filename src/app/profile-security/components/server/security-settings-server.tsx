@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import SecuritySettingsClient from '../client/security-settings-client';
 
-export default async function SecuritySettingsServer() {
+const SecuritySettingsServer: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
   if (!sessionCookie) {
@@ -15,5 +15,7 @@ export default async function SecuritySettingsServer() {
   });
   const data = await response.json();
   const mfaEnabled: boolean = data[0].mfa_enabled;
-  return <SecuritySettingsClient twoFactorEnabled={mfaEnabled} />;
-}
+  return <SecuritySettingsClient newTwoFactorEnabled={mfaEnabled} />;
+};
+
+export default SecuritySettingsServer;

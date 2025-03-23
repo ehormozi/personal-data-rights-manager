@@ -1,7 +1,7 @@
 import Button from '../../../../components/server/button';
 import Widget from '../../../../components/server/widget';
 
-export default function QuickActions() {
+const QuickActions: React.FC = async () => {
   const actions = [
     {
       label: 'Submit Data Request',
@@ -35,4 +35,6 @@ export default function QuickActions() {
       </div>
     </Widget>
   );
-}
+};
+
+export default QuickActions;

@@ -6,7 +6,7 @@ import ConfirmationDialog from '@/components/server/confirmation-dialog';
 import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
 
-export default function PermissionsDetailsClient(props: {
+type PermissionsDetailsClientProps = {
   services: string[];
   assets: string[];
   data: {
@@ -17,7 +17,14 @@ export default function PermissionsDetailsClient(props: {
     sensitivityLabel: string;
   }[];
   prefilter?: string;
-}) {
+};
+
+const PermissionsDetailsClient: React.FC<PermissionsDetailsClientProps> = ({
+  services,
+  assets,
+  data,
+  prefilter,
+}) => {
   const sensitivityColors: Record<string, string> = {
     Low: 'text-green-500',
     Medium: 'text-yellow-500',
@@ -25,13 +32,13 @@ export default function PermissionsDetailsClient(props: {
   };
 
   const columns = [
-    typeof props.prefilter === 'undefined'
+    typeof prefilter === 'undefined'
       ? {
           key: 'service',
           label: 'Service',
           type: 'string',
           filter: true,
-          distinctValues: props.services,
+          distinctValues: services,
           placeholder: 'Select Service',
         }
       : {
@@ -39,16 +46,16 @@ export default function PermissionsDetailsClient(props: {
           label: 'Service',
           type: 'string',
           filter: true,
-          distinctValues: props.services,
+          distinctValues: services,
           placeholder: 'Select Service',
-          prefilters: [props.prefilter],
+          prefilters: [prefilter],
         },
     {
       key: 'asset',
       label: 'Asset',
       type: 'string',
       filter: true,
-      distinctValues: props.assets,
+      distinctValues: assets,
       placeholder: 'Filter by Permissions',
     },
     {
@@ -72,7 +79,7 @@ export default function PermissionsDetailsClient(props: {
       sensitivityLabel: string;
       selected: boolean;
     }[]
-  >([...props.data].map((row) => ({ ...row, selected: false })));
+  >([...data].map((row) => ({ ...row, selected: false })));
 
   const [filteredData, setFilteredData] = useState<
     {
@@ -84,11 +91,11 @@ export default function PermissionsDetailsClient(props: {
       selected: boolean;
     }[]
   >(
-    !props.prefilter
+    !prefilter
       ? allData
       : [...allData]
           .map((row) => ({ ...row, selected: false }))
-          .filter((row) => row.service === props.prefilter),
+          .filter((row) => row.service === prefilter),
   );
 
   const [showRevokeDialog, setShowRevokeDialog] = useState(false);
@@ -310,4 +317,6 @@ export default function PermissionsDetailsClient(props: {
       </section>
     </Widget>
   );
-}
+};
+
+export default PermissionsDetailsClient;

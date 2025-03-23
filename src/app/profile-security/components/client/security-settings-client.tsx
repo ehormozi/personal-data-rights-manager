@@ -5,12 +5,14 @@ import { useState } from 'react';
 import Widget from '@/components/server/widget';
 import WhiteBox from '@/components/server/white-box';
 
-export default function SecuritySettingsClient(props: {
-  twoFactorEnabled: boolean;
-}) {
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    props.twoFactorEnabled,
-  );
+type SecuritySettingsClientProps = {
+  newTwoFactorEnabled: boolean;
+};
+
+const SecuritySettingsClient: React.FC<SecuritySettingsClientProps> = ({
+  newTwoFactorEnabled,
+}) => {
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(newTwoFactorEnabled);
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
@@ -72,4 +74,6 @@ export default function SecuritySettingsClient(props: {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default SecuritySettingsClient;

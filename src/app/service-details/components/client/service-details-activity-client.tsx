@@ -27,7 +27,7 @@ Chart.register(
   Tooltip,
 );
 
-export default function ServiceDetailsActivityClient(props: {
+type ServiceDetailsActivityClientProps = {
   countByCategory: { category: string; count: number }[];
   countByWeek: { week: number; count: number }[];
   categories: string[];
@@ -41,12 +41,16 @@ export default function ServiceDetailsActivityClient(props: {
     action: string;
   }[];
   prefilter?: string;
-}) {
+};
+
+const ServiceDetailsActivityClient: React.FC<
+  ServiceDetailsActivityClientProps
+> = ({ countByCategory, countByWeek, categories, events, data, prefilter }) => {
   const pieData = {
-    labels: props.countByCategory.map((e) => e.category),
+    labels: countByCategory.map((e) => e.category),
     datasets: [
       {
-        data: props.countByCategory.map((e) => e.count),
+        data: countByCategory.map((e) => e.count),
         backgroundColor: ['#EF4444', '#FBBF24', '#10B981'],
         borderWidth: 1,
       },
@@ -77,7 +81,7 @@ export default function ServiceDetailsActivityClient(props: {
         callbacks: {
           label: function (tooltipItem: { raw: any; label: any }) {
             const value = tooltipItem.raw;
-            const percentage = ((value / props.data.length) * 100).toFixed(2);
+            const percentage = ((value / data.length) * 100).toFixed(2);
             return `${tooltipItem.label}: ${value} (${percentage}%)`;
           },
         },
@@ -88,11 +92,11 @@ export default function ServiceDetailsActivityClient(props: {
   };
 
   const barData = {
-    labels: props.countByWeek.map((entry) => `Week ${entry.week}`),
+    labels: countByWeek.map((entry) => `Week ${entry.week}`),
     datasets: [
       {
         label: 'Number of events',
-        data: props.countByWeek.map((entry) => entry.count),
+        data: countByWeek.map((entry) => entry.count),
         backgroundColor: '#3B82F6',
         borderWidth: 1,
       },
@@ -118,7 +122,7 @@ export default function ServiceDetailsActivityClient(props: {
       label: 'Category',
       type: 'string',
       filter: true,
-      distinctValues: props.categories,
+      distinctValues: categories,
       placeholder: 'Select Category',
     },
     {
@@ -126,7 +130,7 @@ export default function ServiceDetailsActivityClient(props: {
       label: 'Event',
       type: 'string',
       filter: true,
-      distinctValues: props.events,
+      distinctValues: events,
       placeholder: 'Select Event',
     },
     {
@@ -260,7 +264,7 @@ export default function ServiceDetailsActivityClient(props: {
       actions: any;
     }[]
   >(
-    [...props.data].map((row) => ({
+    [...data].map((row) => ({
       ...row,
       selected: false,
       actions: row.action.split(', ').map((action, index) => (
@@ -376,7 +380,7 @@ export default function ServiceDetailsActivityClient(props: {
     }
   };
 
-  if (props.data.length > 0) {
+  if (data.length > 0) {
     return (
       <Widget title="Activity">
         <div className="flex space-x-4">
@@ -466,4 +470,6 @@ export default function ServiceDetailsActivityClient(props: {
       </Widget>
     );
   }
-}
+};
+
+export default ServiceDetailsActivityClient;

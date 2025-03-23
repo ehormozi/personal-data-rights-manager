@@ -8,7 +8,7 @@ import {
   ArrowsUpDownIcon,
 } from '@heroicons/react/24/outline';
 
-export default function Datatable(props: {
+type DatatableProps = {
   columns: {
     key: string;
     label: string;
@@ -24,7 +24,15 @@ export default function Datatable(props: {
   filteredData: Record<string, string | number | boolean>[];
   setAllData: any;
   setFilteredData: any;
-}) {
+};
+
+const Datatable: React.FC<DatatableProps> = ({
+  columns,
+  allData,
+  filteredData,
+  setAllData,
+  setFilteredData,
+}) => {
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: string;
@@ -34,7 +42,7 @@ export default function Datatable(props: {
     Set<{ column: string; value: string | number | boolean }>
   >(
     new Set(
-      props.columns
+      columns
         .filter((column) => typeof column.prefilters != 'undefined')
         .map((column) => ({
           column: column.key,
@@ -54,8 +62,8 @@ export default function Datatable(props: {
     ) {
       direction = 'desc';
     }
-    props.setFilteredData(
-      [...props.filteredData].sort((a, b) => {
+    setFilteredData(
+      [...filteredData].sort((a, b) => {
         if (a[key as keyof typeof a] < b[key as keyof typeof b]) {
           return direction === 'asc' ? -1 : 1;
         }
@@ -75,9 +83,9 @@ export default function Datatable(props: {
     const nextSelectedOptions = selectedOptions.add(selectedItem);
     setSelectedOptions(nextSelectedOptions);
     const selectedOptionsArr = [...nextSelectedOptions];
-    const nextFilteredData = [...props.allData].filter((row) => {
+    const nextFilteredData = [...allData].filter((row) => {
       let res = true;
-      props.columns.forEach((column) => {
+      columns.forEach((column) => {
         res =
           res &&
           (selectedOptionsArr.filter((option) => column.key === option.column)
@@ -89,7 +97,7 @@ export default function Datatable(props: {
       });
       return res;
     });
-    props.setFilteredData(nextFilteredData);
+    setFilteredData(nextFilteredData);
     setSelectAll(!nextFilteredData.some((r) => r.selected === false));
   };
 
@@ -105,9 +113,9 @@ export default function Datatable(props: {
     );
     setSelectedOptions(nextSelectedOptions);
     const selectedOptionsArr = [...nextSelectedOptions];
-    const nextFilteredData = [...props.allData].filter((row) => {
+    const nextFilteredData = [...allData].filter((row) => {
       let res = true;
-      props.columns.forEach((column) => {
+      columns.forEach((column) => {
         res =
           res &&
           (selectedOptionsArr.filter((option) => column.key === option.column)
@@ -119,13 +127,13 @@ export default function Datatable(props: {
       });
       return res;
     });
-    props.setFilteredData(nextFilteredData);
+    setFilteredData(nextFilteredData);
     setSelectAll(!nextFilteredData.some((r) => r.selected === false));
   };
 
   const handleSelectAll = () => {
-    const nextAllData = props.allData.map((v) => {
-      if (props.filteredData.filter((v2) => v.id === v2.id).length > 0) {
+    const nextAllData = allData.map((v) => {
+      if (filteredData.filter((v2) => v.id === v2.id).length > 0) {
         let nextV = v;
         nextV.selected = !selectAll;
         return nextV;
@@ -133,18 +141,18 @@ export default function Datatable(props: {
         return v;
       }
     });
-    props.setAllData(nextAllData);
-    const nextFilteredData = props.filteredData.map((v) => {
+    setAllData(nextAllData);
+    const nextFilteredData = filteredData.map((v) => {
       let nextV = v;
       nextV.selected = !selectAll;
       return nextV;
     });
-    props.setFilteredData(nextFilteredData);
+    setFilteredData(nextFilteredData);
     setSelectAll(!selectAll);
   };
 
   const handleRowSelect = (id: number) => {
-    const nextAllData = props.allData.map((row) => {
+    const nextAllData = allData.map((row) => {
       if (id === row.id) {
         let nextRow = row;
         nextRow.selected = !row.selected;
@@ -153,8 +161,8 @@ export default function Datatable(props: {
         return row;
       }
     });
-    props.setAllData(nextAllData);
-    setSelectAll(!props.filteredData.some((r) => r.selected === false));
+    setAllData(nextAllData);
+    setSelectAll(!filteredData.some((r) => r.selected === false));
   };
 
   const onSortData = (key: string) => {
@@ -241,7 +249,7 @@ export default function Datatable(props: {
               onChange={onSelectAll}
             />
           </th>
-          {props.columns.map((column, index) => (
+          {columns.map((column, index) => (
             <th
               key={index}
               className="border border-gray-200 p-2 text-left text-gray-800 hover:bg-gray-200 cursor-pointer"
@@ -295,7 +303,7 @@ export default function Datatable(props: {
         </tr>
       </thead>
       <tbody>
-        {props.filteredData.map((row, index) => (
+        {filteredData.map((row, index) => (
           <tr
             key={index}
             className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
@@ -313,7 +321,7 @@ export default function Datatable(props: {
                 }}
               />
             </td>
-            {props.columns.map((c, i) => (
+            {columns.map((c, i) => (
               <td
                 key={i}
                 className={`border border-gray-200 p-2 text-gray-600
@@ -333,4 +341,6 @@ export default function Datatable(props: {
       </tbody>
     </table>
   );
-}
+};
+
+export default Datatable;

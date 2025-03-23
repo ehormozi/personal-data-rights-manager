@@ -1,16 +1,21 @@
-export default function TopNavigation(props: {
+type TopNavigationProps = {
   navigation: any[];
   classNames: (arg0: string, arg1: string) => string | undefined;
-}) {
+};
+
+const TopNavigation: React.FC<TopNavigationProps> = ({
+  navigation,
+  classNames,
+}) => {
   return (
     <div className="hidden sm:ml-6 sm:block py-1">
       <div className="flex space-x-4">
-        {props.navigation.map((item) => (
+        {navigation.map((item) => (
           <a
             key={item.name}
             href={item.href}
             aria-current={item.current ? 'page' : undefined}
-            className={props.classNames(
+            className={classNames(
               item.current
                 ? 'bg-gray-950 text-white'
                 : 'text-gray-300 hover:bg-gray-700 hover:text-white',
@@ -23,4 +28,6 @@ export default function TopNavigation(props: {
       </div>
     </div>
   );
-}
+};
+
+export default TopNavigation;

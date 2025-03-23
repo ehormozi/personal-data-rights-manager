@@ -5,7 +5,7 @@ import { useState } from 'react';
 import WhiteBox from '@/components/server/white-box';
 import Widget from '@/components/server/widget';
 
-export default function ContactUs() {
+const ContactUs: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,4 +97,6 @@ export default function ContactUs() {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default ContactUs;

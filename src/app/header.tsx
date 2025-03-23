@@ -24,32 +24,36 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Header(props: { currentPage: string }) {
+type HeaderProps = {
+  currentPage: string;
+};
+
+const Header: React.FC<HeaderProps> = ({ currentPage }) => {
   const navigation = [
     {
       name: 'Dashboard',
       href: '/dashboard',
-      current: props.currentPage === 'dashboard',
+      current: currentPage === 'dashboard',
     },
     {
       name: 'Permissions',
       href: '/permissions',
-      current: props.currentPage === 'permissions',
+      current: currentPage === 'permissions',
     },
     {
       name: 'Requests',
       href: '/requests',
-      current: props.currentPage === 'requests',
+      current: currentPage === 'requests',
     },
     {
       name: 'Activity Log',
       href: '/activity-log',
-      current: props.currentPage === 'activity-log',
+      current: currentPage === 'activity-log',
     },
     {
       name: 'Help & Support',
       href: '/help-support',
-      current: props.currentPage === 'help-support',
+      current: currentPage === 'help-support',
     },
   ];
 
@@ -193,4 +197,6 @@ export default function Header(props: { currentPage: string }) {
       </Disclosure>
     </>
   );
-}
+};
+
+export default Header;

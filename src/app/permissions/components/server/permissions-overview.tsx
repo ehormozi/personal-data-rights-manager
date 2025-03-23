@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import Widget from '@/components/server/widget';
 
-export default async function PermissionsOverview() {
+const PermissionsOverview: React.FC = async () => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -71,4 +71,6 @@ export default async function PermissionsOverview() {
       </div>
     </Widget>
   );
-}
+};
+
+export default PermissionsOverview;

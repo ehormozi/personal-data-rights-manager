@@ -2,10 +2,12 @@ import { cookies } from 'next/headers';
 
 import Widget from '@/components/server/widget';
 
-export default async function ServiceHeader(props: {
+type ServiceHeaderProps = {
   logo: string;
   name: string;
-}) {
+};
+
+const ServiceHeader: React.FC<ServiceHeaderProps> = async ({ logo, name }) => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -14,7 +16,7 @@ export default async function ServiceHeader(props: {
   }
 
   const response = await fetch(
-    `http://localhost:3001/api/service-last-activity/${props.name}`,
+    `http://localhost:3001/api/service-last-activity/${name}`,
     {
       method: 'GET',
       credentials: 'include',
@@ -59,19 +61,15 @@ export default async function ServiceHeader(props: {
       <nav className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={props.logo}
-            alt={`${props.name} Logo`}
-            className="h-16 w-16"
-          />
+          <img src={logo} alt={`${name} Logo`} className="h-16 w-16" />
           <div>
-            <h1 className="text-2xl font-semibold text-gray-800">
-              {props.name}
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-800">{name}</h1>
             <p className="text-gray-600">Last Activity: {lastActivity}</p>
           </div>
         </div>
       </nav>
     </Widget>
   );
-}
+};
+
+export default ServiceHeader;

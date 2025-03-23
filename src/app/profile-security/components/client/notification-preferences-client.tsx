@@ -5,12 +5,15 @@ import { useState } from 'react';
 import Widget from '@/components/server/widget';
 import WhiteBox from '@/components/server/white-box';
 
-export default function NotificationPreferencesClient(props: {
-  notificationPreferences: Record<string, boolean>;
-}) {
-  const [notificationPreferences, setNotificationPreferences] = useState<
-    Record<string, boolean>
-  >(props.notificationPreferences);
+type NotificationPreferencesClientProps = {
+  newPreferences: Record<string, boolean>;
+};
+
+const NotificationPreferencesClient: React.FC<
+  NotificationPreferencesClientProps
+> = ({ newPreferences }) => {
+  const [notificationPreferences, setNotificationPreferences] =
+    useState<Record<string, boolean>>(newPreferences);
 
   const toggleNotification = (category: string) => {
     setNotificationPreferences((prev: Record<string, boolean>) => ({
@@ -51,4 +54,6 @@ export default function NotificationPreferencesClient(props: {
       </WhiteBox>
     </Widget>
   );
-}
+};
+
+export default NotificationPreferencesClient;

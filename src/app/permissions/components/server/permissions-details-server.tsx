@@ -2,9 +2,13 @@ import { cookies } from 'next/headers';
 
 import PermissionsDetailsClient from '../client/permissions-details-client';
 
-export default async function PermissionsDetailsServer(props: {
+type PermissionsDetailsServerProps = {
   prefilter?: string;
-}) {
+};
+
+const PermissionsDetailsServer: React.FC<
+  PermissionsDetailsServerProps
+> = async ({ prefilter }) => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('connect.sid')?.value;
 
@@ -66,12 +70,12 @@ export default async function PermissionsDetailsServer(props: {
     }
     return 0;
   });
-  return typeof props.prefilter === 'string' ? (
+  return typeof prefilter === 'string' ? (
     <PermissionsDetailsClient
       services={distinctServices}
       assets={distinctAssets}
       data={data}
-      prefilter={props.prefilter}
+      prefilter={prefilter}
     />
   ) : (
     <PermissionsDetailsClient
@@ -80,4 +84,6 @@ export default async function PermissionsDetailsServer(props: {
       data={data}
     />
   );
-}
+};
+
+export default PermissionsDetailsServer;
