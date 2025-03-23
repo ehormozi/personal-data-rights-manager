@@ -20,6 +20,8 @@ export default function ProtectedPage({
     }
   }, [user, loading, router]);
 
-  if (loading) return <LoadingSpinner />;
-  return <>{children}</>;
+  if (user) {
+    if (loading) return <LoadingSpinner />;
+    return <>{children}</>;
+  }
 }
