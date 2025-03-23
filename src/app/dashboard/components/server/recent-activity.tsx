@@ -133,6 +133,7 @@ const RecentActivity: React.FC = async () => {
           )}
         </div>
         <Button
+          route={`/activity-log`}
           text="View Full Activity Log"
           color="bg-blue-600"
           hover="hover:bg-blue-700"
