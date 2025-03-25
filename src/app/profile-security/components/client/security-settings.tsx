@@ -5,14 +5,7 @@ import { useState } from 'react';
 import Widget from '@/components/server/widget';
 import WhiteBox from '@/components/server/white-box';
 
-type SecuritySettingsClientProps = {
-  newTwoFactorEnabled: boolean;
-};
-
-const SecuritySettingsClient: React.FC<SecuritySettingsClientProps> = ({
-  newTwoFactorEnabled,
-}) => {
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(newTwoFactorEnabled);
+const SecuritySettings: React.FC = () => {
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
@@ -62,18 +55,9 @@ const SecuritySettingsClient: React.FC<SecuritySettingsClientProps> = ({
         <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
           Change Password
         </button>
-        <div className="flex justify-between items-center">
-          <span>Two-Factor Authentication</span>
-          <button
-            className={`py-2 px-4 rounded-lg ${twoFactorEnabled ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} text-white`}
-            onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
-          >
-            {twoFactorEnabled ? 'Disable' : 'Enable'} 2FA
-          </button>
-        </div>
       </WhiteBox>
     </Widget>
   );
 };
 
-export default SecuritySettingsClient;
+export default SecuritySettings;

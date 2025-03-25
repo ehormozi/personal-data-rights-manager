@@ -3,7 +3,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
-  user: { firstName: string; lastName: string; email: string } | null;
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    profile_photo_url: string;
+  } | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -28,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             firstName: data.first_name,
             lastName: data.last_name,
             email: data.email,
+            profile_photo_url: data.profile_photo_url,
           });
         }
       } catch (error) {

@@ -4,10 +4,12 @@ const next = require('next');
 const ExcelJS = require('exceljs');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
+const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const multer = require('multer');
 const { Pool } = require('pg');
 const { Parser } = require('json2csv');
 const { RedisStore } = require('connect-redis');
@@ -30,8 +32,18 @@ const redisClient = createClient({
     port: 6379,
   },
 });
-
 let redisStore = new RedisStore({ client: redisClient, disableTouch: true });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
 
 app.prepare().then(() => {
   const pool = new Pool({
@@ -39,7 +51,6 @@ app.prepare().then(() => {
   });
 
   redisClient.connect().catch(console.error);
-
   redisClient.on('connect', () => {
     console.log('✅ Redis connected successfully!');
   });
@@ -72,7 +83,7 @@ app.prepare().then(() => {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'SELECT id, first_name, last_name, email, password_hash FROM users WHERE email = $1',
+        'SELECT id, first_name, last_name, email, password_hash, profile_photo_url FROM users WHERE email = $1',
         [email],
       );
       client.release();
@@ -96,6 +107,7 @@ app.prepare().then(() => {
             firstName: user.first_name,
             lastName: user.last_name,
             email: user.email,
+            profile_photo_url: user.profile_photo_url,
           },
         });
       });
@@ -157,7 +169,7 @@ app.prepare().then(() => {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'SELECT first_name, last_name, email FROM users WHERE id = $1',
+        'SELECT first_name, last_name, email, mfa_enabled, profile_photo_url FROM users WHERE id = $1',
         [req.session.userId],
       );
       client.release();
@@ -170,16 +182,31 @@ app.prepare().then(() => {
   server.post(
     '/api/auth/update-account-info',
     requireAuth,
+    upload.single('photo'),
     async (req, res) => {
-      const { firstName, lastName, email } = req.body;
+      const { firstName, lastName, email, twoFactorEnabled } = req.body;
+      const photoFilename = req.file?.filename;
       try {
         const client = await pool.connect();
-        await client.query(
-          `UPDATE users
-          SET first_name = $1, last_name = $2, email = $3
-          WHERE id = $4`,
-          [firstName, lastName, email, req.session.userId],
-        );
+        const updateFields = [
+          'first_name = $1',
+          'last_name = $2',
+          'email = $3',
+          'mfa_enabled = $4',
+        ];
+        const values = [firstName, lastName, email, twoFactorEnabled];
+        let queryIndex = 5;
+        if (photoFilename) {
+          updateFields.push(`profile_photo_url = $${queryIndex++}`);
+          values.push(photoFilename);
+        }
+        values.push(req.session.userId);
+        const query = `
+          UPDATE users
+          SET ${updateFields.join(', ')}
+          WHERE id = $${queryIndex}
+        `;
+        await client.query(query, values);
         client.release();
         res.json({ message: 'Account information updated successfully.' });
       } catch (error) {

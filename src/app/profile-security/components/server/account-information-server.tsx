@@ -20,6 +20,7 @@ const AccountInformationServer: React.FC = async () => {
       firstName={data.first_name}
       lastName={data.last_name}
       email={data.email}
+      mfaEnabled={data.mfa_enabled}
     />
   );
 };

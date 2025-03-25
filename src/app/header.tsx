@@ -5,9 +5,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/context/auth-context';
+
 import { useLoading } from '@/context/loading-context';
 
-import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  BellIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 import {
   Disclosure,
   DisclosureButton,
@@ -71,7 +77,6 @@ const Header: React.FC<HeaderProps> = ({ currentPage }) => {
     try {
       await logout().then(() => router.push('/login'));
     } catch (error: any) {
-      console.log(error);
     } finally {
       setShowMenuItems(false);
       setIsLoading(false);
@@ -103,8 +108,8 @@ const Header: React.FC<HeaderProps> = ({ currentPage }) => {
                 {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    alt="Your Company"
-                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                    alt="Company Logo"
+                    src="Logo.png"
                     className="h-8 w-auto"
                   />
                 }
@@ -137,18 +142,33 @@ const Header: React.FC<HeaderProps> = ({ currentPage }) => {
               <Menu as="div" className="relative ml-3">
                 <div>
                   <MenuButton
-                    className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className={`relative
+                      flex
+                      rounded-full
+                      bg-gray-800
+                      text-gray-400
+                      hover:text-white
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-white
+                      focus:ring-offset-2
+                      focus:ring-offset-gray-800
+                      ${user?.profile_photo_url ? '' : 'p-1'}`}
                     onClick={() => setShowMenuItems(!showMenuItems)}
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     {
                       /* eslint-disable @next/next/no-img-element */
-                      <img
-                        alt=""
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        className="h-8 w-8 rounded-full"
-                      />
+                      user?.profile_photo_url ? (
+                        <img
+                          src={'uploads/' + user?.profile_photo_url}
+                          alt="Profile"
+                          className="h-8 w-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <UserIcon aria-hidden="true" className="h-6 w-6" />
+                      )
                     }
                   </MenuButton>
                 </div>
