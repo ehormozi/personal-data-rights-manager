@@ -31,32 +31,23 @@ const mockServiceData = {
   ],
 };
 
-interface Params {
-  slug: string;
-}
-
-interface SearchParams {
-  [key: string]: string | string[] | undefined;
-}
-
-export default function ServicePermissionsPage({
-  params,
+export default async function ServicePermissionsPage({
   searchParams,
 }: {
-  params: Params;
-  searchParams: SearchParams;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  if (typeof searchParams.service === 'string') {
+  const service = (await searchParams).service;
+  if (typeof service === 'string') {
     return (
       <ProtectedPage>
         <div className="p-6 space-y-6 bg-neutral-100">
           <ServiceHeader
-            logo={`https://img.logo.dev/${searchParams.service}.com?token=pk_R_PqZb2eSUafz-H25PKuwQ`}
-            name={searchParams.service}
+            logo={`https://img.logo.dev/${service}.com?token=pk_R_PqZb2eSUafz-H25PKuwQ`}
+            name={service}
           />
-          <ServiceDetailsPermissionsServer name={searchParams.service} />
-          <ServiceDetailsRequestsServer name={searchParams.service} />
-          <ServiceDetailsActivityServer name={searchParams.service} />
+          <ServiceDetailsPermissionsServer name={service} />
+          <ServiceDetailsRequestsServer name={service} />
+          <ServiceDetailsActivityServer name={service} />
         </div>
       </ProtectedPage>
     );

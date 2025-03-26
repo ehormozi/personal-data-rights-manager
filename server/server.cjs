@@ -723,11 +723,11 @@ app.prepare().then(() => {
       try {
         const result = await client.query(
           `SELECT MAX(e.time) AS last_activity
-        FROM public.events e
-        INNER JOIN public.services s
-        ON e.service = s.id
-        WHERE s.name = $1
-        AND s.user = $2;`,
+          FROM public.events e
+          INNER JOIN public.services s
+          ON e.service = s.id
+          WHERE s.name = $1
+          AND e.user = $2;`,
           [serviceName, userId],
         );
         res.status(200).json(result.rows);
@@ -894,7 +894,7 @@ app.prepare().then(() => {
           ON e.service = s.id
           WHERE e.time >= NOW() - INTERVAL '4 weeks'
           AND s.name = $1
-          AND e.user = $2'
+          AND e.user = $2
           GROUP BY week;`,
           [serviceName, userId],
         );

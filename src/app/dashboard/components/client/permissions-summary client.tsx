@@ -1,5 +1,9 @@
 'use client';
 
+import { Key, ReactNode, useState } from 'react';
+
+import Link from 'next/link';
+
 import {
   FaGoogle,
   FaFacebook,
@@ -8,7 +12,7 @@ import {
   FaLinkedin,
   FaTiktok,
 } from 'react-icons/fa';
-import { Key, ReactNode, useState } from 'react';
+
 import Widget from '../../../../components/server/widget';
 import WhiteBox from '../../../../components/server/white-box';
 import Button from '../../../../components/server/button';
@@ -70,12 +74,15 @@ const PermissionsSummaryClient: React.FC<PermissionsSummaryClientProps> = ({
             </div>
 
             <div className="flex space-x-2">
-              <Button
-                route={`/service-details?service=${row.service}`}
-                text="Manage"
-                color="bg-blue-600"
-                hover="hover:bg-blue-700"
-              />
+              <Link
+                href={{
+                  pathname: '/service-details',
+                  query: { service: `${row.service}` },
+                }}
+                className="py-2 px-4 text-white rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700"
+              >
+                Manage
+              </Link>
               <Button
                 text="Revoke All"
                 color="bg-red-600"
