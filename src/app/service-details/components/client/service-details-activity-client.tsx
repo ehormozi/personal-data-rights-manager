@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import { Pie, Bar } from 'react-chartjs-2';
+
 import {
   Chart,
   ArcElement,
@@ -397,7 +399,7 @@ const ServiceDetailsActivityClient: React.FC<
             {<Bar data={barData} />}
           </WhiteBox>
         </div>
-        <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
+        <WhiteBox className="flex flex-col max-h-screen overflow-y-auto p-4">
           <div className="flex flex-wrap gap-4 mb-4">
             <button
               className={
@@ -460,7 +462,7 @@ const ServiceDetailsActivityClient: React.FC<
                   />
                 ),
             )}
-        </section>
+        </WhiteBox>
       </Widget>
     );
   } else {

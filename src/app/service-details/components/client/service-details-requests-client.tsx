@@ -495,7 +495,7 @@ const ServiceDetailsRequestsClient: React.FC<
             {<Bar data={barData} />}
           </WhiteBox>
         </div>
-        <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
+        <WhiteBox className="flex flex-col max-h-screen overflow-y-auto p-4">
           <div className="flex flex-wrap gap-4 mb-4">
             <button
               className={
@@ -558,7 +558,7 @@ const ServiceDetailsRequestsClient: React.FC<
                   />
                 ),
             )}
-        </section>
+        </WhiteBox>
       </Widget>
     );
   } else {

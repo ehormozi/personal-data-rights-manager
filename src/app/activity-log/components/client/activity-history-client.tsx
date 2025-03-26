@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+
 import Widget from '@/components/server/widget';
 import ConfirmationDialog from '@/components/server/confirmation-dialog';
 import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
+import WhiteBox from '@/components/server/white-box';
 
 type ActivityHistoryClientProps = {
   categories: string[];
@@ -296,7 +298,7 @@ const ActivityHistoryClient: React.FC<ActivityHistoryClientProps> = ({
 
   return (
     <Widget title="Activity History">
-      <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
+      <WhiteBox className="flex flex-col max-h-screen overflow-y-auto p-4">
         <div className="flex flex-wrap gap-4 mb-4">
           <button
             className={
@@ -359,7 +361,7 @@ const ActivityHistoryClient: React.FC<ActivityHistoryClientProps> = ({
                 />
               ),
           )}
-      </section>
+      </WhiteBox>
     </Widget>
   );
 };

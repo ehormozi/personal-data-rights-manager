@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import Widget from '@/components/server/widget';
+import WhiteBox from '@/components/server/white-box';
 import ConfirmationDialog from '@/components/server/confirmation-dialog';
 import FileFormatDialog from '@/components/client/file-format-dialog';
 import Datatable from '@/components/client/datatable';
@@ -210,7 +212,7 @@ const PermissionsDetailsClient: React.FC<PermissionsDetailsClientProps> = ({
 
   return (
     <Widget title="Permissions Details">
-      <section className="flex flex-col max-h-screen overflow-y-auto bg-white p-4 rounded-lg shadow-md">
+      <WhiteBox className="flex flex-col max-h-screen overflow-y-auto p-4">
         <div className="flex flex-wrap gap-4 mb-4">
           <button
             className={
@@ -314,7 +316,7 @@ const PermissionsDetailsClient: React.FC<PermissionsDetailsClientProps> = ({
             onCancel={cancelExportConf}
           />
         )}
-      </section>
+      </WhiteBox>
     </Widget>
   );
 };
